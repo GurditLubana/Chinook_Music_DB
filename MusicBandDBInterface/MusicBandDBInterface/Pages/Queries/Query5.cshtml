@@ -1,0 +1,37 @@
+﻿@page
+@model MusicBandDBInterface.Pages.Queries.Query5Model
+@{
+}
+
+
+<div class="text-left">
+    <h4>Query : Retrieves the first name, last name, track name, artist name, and album name of all customers whose first names start with either "F" or "R" and who have purchased a track whose name starts with either "A" or "B". The results are ordered by track name in ascending order.</h4>
+    <br>
+    <hr>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Track Name</th>
+                <th>Artist Name</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.customerList)
+            {
+                <tr>
+                    <td>@customer.fName</td>
+                    <td>@customer.lName</td>
+                    <td>@customer.track</td>
+                    <td>@customer.artist</td>
+
+                   
+                </tr>
+            }
+
+        </tbody>
+    </table>

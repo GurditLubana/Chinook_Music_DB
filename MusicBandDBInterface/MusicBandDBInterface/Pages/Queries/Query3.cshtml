@@ -1,0 +1,34 @@
+﻿@page
+@model MusicBandDBInterface.Pages.Queries.Query3Model
+@{
+}
+<div class ="text-left">
+    <h4>Query : Find the top 10 customers (customer name should be combined First and last name in a single string) who spent the most money on music purchases, along with the total amount spent(in the decreasing order) and the most popular genre they purchased.</h4>
+    <br>
+    <hr>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Customer Name</th>
+                <th>Total Amount Spent</th>
+                <th>Most Popular Genre</th>
+                
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cust in Model.Customerlist)
+            {
+
+                <tr>
+                    <td>@cust.name</td>
+                    <td>@cust.amount</td>
+                    <td>@cust.genre</td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>

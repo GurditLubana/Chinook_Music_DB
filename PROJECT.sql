@@ -1,0 +1,1361 @@
+USE PROJECT;
+
+CREATE TABLE PERSON (
+
+	PERSONID		TINYINT			PRIMARY KEY,
+	FirstName		VARCHAR(20)		NOT NULL,
+	LastName		VARCHAR(20)		NOT NULL,
+	Address			VARCHAR(60)		NOT NULL,
+	City			VARCHAR(20)		NOT NULL,
+	State			VARCHAR(10)		NULL,
+	Country			VARCHAR(20)		NOT NULL,
+	PostalCode		VARCHAR(10)		NULL,
+	Phone			VARCHAR(20)		NULL,
+	Fax			    VARCHAR(20)		NULL,
+	Email			VARCHAR(60)		NOT NULL	UNIQUE,
+);
+
+
+CREATE TABLE EMPLOYEE (
+
+	EMPLOYEEID		TINYINT			PRIMARY KEY,
+	Title			VARCHAR(25)		NOT NULL,
+	ReportsTo		TINYINT			NULL,
+	BirthDATE		DATE			NOT NULL,
+	HireDATE		DATE			NOT NULL
+
+	FOREIGN KEY (EMPLOYEEID) REFERENCES PERSON (PERSONID),
+	FOREIGN KEY (ReportsTo) REFERENCES EMPLOYEE (EMPLOYEEID)
+
+);
+
+
+CREATE TABLE CUSTOMER (
+	
+	CUSTOMERID		TINYINT			PRIMARY KEY,
+	Company			VARCHAR(60)		NULL,
+	SupportRepID	TINYINT
+
+	FOREIGN KEY (CUSTOMERID) REFERENCES PERSON (PERSONID),
+	FOREIGN KEY (SupportRepID) REFERENCES EMPLOYEE (EMPLOYEEID)
+
+);
+
+CREATE TABLE INVOICE (
+
+	InvoiceID		SMALLINT			PRIMARY KEY,
+	CUSTOMERID		TINYINT				NOT NULL,
+	InvoiceDATE		DATETIME			NOT NULL,
+	BillingAdrs		VARCHAR(60)			NOT NULL,
+	BillingCity		VARCHAR(20)			NOT NULL,
+	BillingState	VARCHAR(10)			NULL,
+	BillingCntry	VARCHAR(20)			NOT NULL,
+	BillingPstCD	VARCHAR(10)			NULL,
+	Total			DECIMAL(4,2)		NOT NULL
+
+	FOREIGN KEY (CUSTOMERID) REFERENCES CUSTOMER (CUSTOMERID)
+
+);
+
+CREATE TABLE PLAYLIST (
+	
+	PlaylistID			TINYINT		PRIMARY KEY,
+	Name VARCHAR(50)	NOT NULL	
+
+);
+
+CREATE TABLE MEDIATYPE (
+
+	MediaTypeID			TINYINT			PRIMARY KEY,
+	Name				VARCHAR(35)		NOT NULL 
+
+);
+
+CREATE TABLE GENRE (
+
+	GenreID		TINYINT			PRIMARY KEY,
+	Name		VARCHAR(25)		NOT NULL 
+
+);
+
+CREATE TABLE ARTIST (
+	
+	ArtistID	SMALLINT		PRIMARY KEY,
+	Name		VARCHAR(90)		NOT NULL 
+
+);
+
+CREATE TABLE ALBUM (
+
+	AlbumID			SMALLINT		PRIMARY KEY,
+	Title			VARCHAR(100)	NOT NULL ,
+	ArtistID		SMALLINT		NOT NULL
+
+	FOREIGN KEY (ArtistID) REFERENCES Artist (ArtistID)
+);
+
+CREATE TABLE TRACK (
+	
+	TrackID			SMALLINT		PRIMARY KEY,
+	Name			VARCHAR(110)	NOT NULL,
+	AlbumID			SMALLINT		NOT NULL,
+	MediaTypeID		TINYINT			NOT NULL,
+	GenreID			TINYINT			NOT NULL,
+	Composer		VARCHAR(150)	NULL,
+	Milliseconds	INT				NOT NULL,
+	Bytes			INT				NOT NULL,
+	UnitPrice		DECIMAL(3,2)	NOT NULL
+
+	FOREIGN KEY (AlbumID) REFERENCES Album (AlbumID),
+	FOREIGN KEY (MediaTypeID) REFERENCES MediaType (MediaTypeID),
+	FOREIGN KEY (GenreID) REFERENCES Genre (GenreID)
+
+);
+
+CREATE TABLE PLAYLIST_TRACK (
+	
+	PlaylistID	TINYINT,
+	TrackID		SMALLINT
+
+	PRIMARY KEY (PlaylistID, TrackID),
+	FOREIGN KEY (PlaylistID) REFERENCES Playlist (PlaylistID),
+	FOREIGN KEY (TrackID) REFERENCES Track (TrackID)
+
+);
+
+CREATE TABLE INVOICE_LINE (
+	
+	InvoiceLineID		SMALLINT		PRIMARY KEY,
+	InvoiceID			SMALLINT		NOT NULL,
+	TrackID				SMALLINT		NOT NULL,
+	UnitPrice			DECIMAL(3,2)	NOT NULL,
+	Quantity			SMALLINT		NOT NULL
+
+	FOREIGN KEY (InvoiceID) REFERENCES Invoice (InvoiceID),
+	FOREIGN KEY (TrackID) REFERENCES Track (TrackID)
+
+);
+
+
+
+INSERT INTO PERSON VALUES (1,'Adams','Andrew','11120 Jasper Ave','Edmonton','AB','Canada','T5K 2N1','+1 780-428-9482','+1 780-428-3457','andrew@chinookcorp.com');
+INSERT INTO PERSON VALUES (2,'Edwards','Nancy','825 8 Ave','Calgary','AB','Canada','T2P 2T3','+1 403-262-3443','+1 403-262-3322','nancy@chinookcorp.com');
+INSERT INTO PERSON VALUES (3,'Peacock','Jane','1111 6 Ave','Calgary','AB','Canada','T2P 5M5','+1 403-262-3443','+1 403-262-6712','jane@chinookcorp.com');
+INSERT INTO PERSON VALUES (4,'Park','Margaret','683 10 Street','Calgary','AB','Canada','T2P 5G3','+1 403-263-4423','+1 403-263-4289','margaret@chinookcorp.com');
+INSERT INTO PERSON VALUES (5,'Johnson','Steve','7727B 41 Ave','Calgary','AB','Canada','T3B 1Y7','+1 780-836-9987','+1 780-836-9543','steve@chinookcorp.com');
+INSERT INTO PERSON VALUES (6,'Mitchell','Michael','5827 Bowness Road','Calgary','AB','Canada','T3B 0C5','+1 403-246-9887','+1 403-246-9899','michael@chinookcorp.com');
+INSERT INTO PERSON VALUES (7,'King','Robert','590 Columbia Boulevard West','Lethbridge','AB','Canada','T1K 5N8','+1 403-456-9986','+1 403-456-8485','robert@chinookcorp.com');
+INSERT INTO PERSON VALUES (8,'Callahan','Laura','923 7 ST','Lethbridge','AB','Canada','T1H 1Y8','+1 403-467-3351','+1 403-467-8772','laura@chinookcorp.com');
+INSERT INTO PERSON VALUES (9,'Luís','Gonçalves','Av. Brigadeiro Faria Lima, 2170','São José dos Campos','SP','Brazil','12227-000','+55 12-3923-5555','+55 12-3923-5566','luisg@embraer.com.br');
+INSERT INTO PERSON VALUES (10,'Leonie','Köhler','Theodor-Heuss-Straße 34','Stuttgart',NULL,'Germany','70174','+49 071 12842222',NULL,'leonekohler@surfeu.de');
+INSERT INTO PERSON VALUES (11,'François','Tremblay','1498 rue Bélanger','Montréal','QC','Canada','H2G 1A7','+1 514-721-4711',NULL,'ftremblay@gmail.com');
+INSERT INTO PERSON VALUES (12,'Bjørn','Hansen','Ullevålsveien 14','Oslo',NULL,'Norway','0171','+47 22-44-22-22',NULL,'bjorn.hansen@yahoo.no');
+INSERT INTO PERSON VALUES (13,'František','Wichterlová','Klanova 9/506','Prague',NULL,'Czech Republic','14700','+420 2-4172-5555','+420 2-4172-5555','frantisekw@jetbrains.com');
+INSERT INTO PERSON VALUES (14,'Helena','Holý','Rilská 3174/6','Prague',NULL,'Czech Republic','14300','+420 2-4177-0449',NULL,'hholy@gmail.com');
+INSERT INTO PERSON VALUES (15,'Astrid','Gruber','Rotenturmstraße 4, 1010 Innere Stadt','Vienne',NULL,'Austria','1010','+43 01-5134505',NULL,'astrid.gruber@apple.at');
+INSERT INTO PERSON VALUES (16,'Daan','Peeters','Grétrystraat 63','Brussels',NULL,'Belgium','1000','+32 02-219-03-03',NULL,'daan_peeters@apple.be');
+INSERT INTO PERSON VALUES (17,'Kara','Nielsen','Sønder Boulevard 51','Copenhagen',NULL,'Denmark','1720','+453 3331-9991',NULL,'kara.nielsen@jubii.dk');
+INSERT INTO PERSON VALUES (18,'Eduardo','Martins','Rua Dr. Falcão Filho, 155','São Paulo','SP','Brazil','01007-010','+55 11-3033-5446','+55 11-3033-4564','eduardo@woodstock.com.br');
+INSERT INTO PERSON VALUES (19,'Alexandre','Rocha','Av. Paulista, 2022','São Paulo','SP','Brazil','01310-200','+55 11-3055-3278','+55 11-3055-8131','alero@uol.com.br');
+INSERT INTO PERSON VALUES (20,'Roberto','Almeida','Praça Pio X, 119','Rio de Janeiro','RJ','Brazil','20040-020','+55 21-2271-7000','+55 21-2271-7070','roberto.almeida@riotur.gov.br');
+INSERT INTO PERSON VALUES (21,'Fernanda','Ramos','Qe 7 Bloco G','Brasília','DF','Brazil','71020-677','+55 61-3363-5547','+55 61-3363-7855','fernadaramos4@uol.com.br');
+INSERT INTO PERSON VALUES (22,'Mark','Philips','8210 111 ST NW','Edmonton','AB','Canada','T6G 2C7','+1 780-434-4554','+1 780-434-5565','mphilips12@shaw.ca');
+INSERT INTO PERSON VALUES (23,'Jennifer','Peterson','700 W Pender Street','Vancouver','BC','Canada','V6C 1G8','+1 604-688-2255','+1 604-688-8756','jenniferp@rogers.ca');
+INSERT INTO PERSON VALUES (24,'Frank','Harris','1600 Amphitheatre Parkway','Mountain View','CA','USA','94043-1351','+1 650-253-0000','+1 650-253-0000','fharris@google.com');
+INSERT INTO PERSON VALUES (25,'Jack','Smith','1 Microsoft Way','Redmond','WA','USA','98052-8300','+1 425-882-8080','+1 425-882-8081','jacksmith@microsoft.com');
+INSERT INTO PERSON VALUES (26,'Michelle','Brooks','627 Broadway','New York','NY','USA','10012-2612','+1 212-221-3546','+1 212-221-4679','michelleb@aol.com');
+INSERT INTO PERSON VALUES (27,'Tim','Goyer','1 Infinite Loop','Cupertino','CA','USA','95014','+1 408-996-1010','+1 408-996-1011','tgoyer@apple.com');
+INSERT INTO PERSON VALUES (28,'Dan','Miller','541 Del Medio Avenue','Mountain View','CA','USA','94040-111','+1 650-644-3358',NULL,'dmiller@comcast.com');
+INSERT INTO PERSON VALUES (29,'Kathy','Chase','801 W 4th Street','Reno','NV','USA','89503','+1 775-223-7665',NULL,'kachase@hotmail.com');
+INSERT INTO PERSON VALUES (30,'Heather','Leacock','120 S Orange Ave','Orlando','FL','USA','32801','+1 407-999-7788',NULL,'hleacock@gmail.com');
+INSERT INTO PERSON VALUES (31,'John','Gordon','69 Salem Street','Boston','MA','USA','2113','+1 617-522-1333',NULL,'johngordon22@yahoo.com');
+INSERT INTO PERSON VALUES (32,'Frank','Ralston','162 E Superior Street','Chicago','IL','USA','60611','+1 312-332-3232',NULL,'fralston@gmail.com');
+INSERT INTO PERSON VALUES (33,'Victor','Stevens','319 N. Frances Street','Madison','WI','USA','53703','+1 608-257-0597',NULL,'vstevens@yahoo.com');
+INSERT INTO PERSON VALUES (34,'Richard','Cunningham','2211 W Berry Street','Fort Worth','TX','USA','76110','+1 817-924-7272',NULL,'ricunningham@hotmail.com');
+INSERT INTO PERSON VALUES (35,'Patrick','Gray','1033 N Park Ave','Tucson','AZ','USA','85719','+1 520-622-4200',NULL,'patrick.gray@aol.com');
+INSERT INTO PERSON VALUES (36,'Julia','Barnett','302 S 700 E','Salt Lake City','UT','USA','84102','+1 801-531-7272',NULL,'jubarnett@gmail.com');
+INSERT INTO PERSON VALUES (37,'Robert','Brown','796 Dundas Street West','Toronto','ON','Canada','M6J 1V1','+1 416-363-8888',NULL,'robbrown@shaw.ca');
+INSERT INTO PERSON VALUES (38,'Edward','Francis','230 Elgin Street','Ottawa','ON','Canada','K2P 1L7','+1 613-234-3322',NULL,'edfrancis@yachoo.ca');
+INSERT INTO PERSON VALUES (39,'Martha','Silk','194A Chain Lake Drive','Halifax','NS','Canada','B3S 1C5','+1 902-450-0450',NULL,'marthasilk@gmail.com');
+INSERT INTO PERSON VALUES (40,'Aaron','Mitchell','696 Osborne Street','Winnipeg','MB','Canada','R3L 2B9','+1 204-452-6452',NULL,'aaronmitchell@yahoo.ca');
+
+
+INSERT INTO EMPLOYEE VALUES (1,'General Manager',NULL,'1962-02-18','2002-08-14');
+INSERT INTO EMPLOYEE VALUES (2,'Sales Manager',1,'1958-12-08','2002-05-01');
+INSERT INTO EMPLOYEE VALUES (3,'Sales Support Agent',2,'1973-08-29','2002-04-01');
+INSERT INTO EMPLOYEE VALUES (4,'Sales Support Agent',2,'1947-09-19','2003-05-03');
+INSERT INTO EMPLOYEE VALUES (5,'Sales Support Agent',2,'1965-03-03','2003-10-17');
+INSERT INTO EMPLOYEE VALUES (6,'IT Manager',1,'1973-07-01','2003-10-17');
+INSERT INTO EMPLOYEE VALUES (7,'IT Staff',6,'1970-05-29','2004-01-02');
+INSERT INTO EMPLOYEE VALUES (8,'IT Staff',6,'1968-01-09','2004-03-04');
+
+
+INSERT INTO CUSTOMER VALUES (9,'Embraer - Empresa Brasileira de Aeronáutica S.A.',3);
+INSERT INTO CUSTOMER VALUES (10,NULL,5);
+INSERT INTO CUSTOMER VALUES (11,NULL,3);
+INSERT INTO CUSTOMER VALUES (12,NULL,4);
+INSERT INTO CUSTOMER VALUES (13,'JetBrains s.r.o.',4);
+INSERT INTO CUSTOMER VALUES (14,NULL,5);
+INSERT INTO CUSTOMER VALUES (15,NULL,5);
+INSERT INTO CUSTOMER VALUES (16,NULL,4);
+INSERT INTO CUSTOMER VALUES (17,NULL,4);
+INSERT INTO CUSTOMER VALUES (18,'Woodstock Discos',4);
+INSERT INTO CUSTOMER VALUES (19,'Banco do Brasil S.A.',5);
+INSERT INTO CUSTOMER VALUES (20,'Riotur',3);
+INSERT INTO CUSTOMER VALUES (21,NULL,4);
+INSERT INTO CUSTOMER VALUES (22,'Telus',5);
+INSERT INTO CUSTOMER VALUES (23,'Rogers Canada',3);
+INSERT INTO CUSTOMER VALUES (24,'Google Inc.',4);
+INSERT INTO CUSTOMER VALUES (25,'Microsoft Corporation',5);
+INSERT INTO CUSTOMER VALUES (26,NULL,3);
+INSERT INTO CUSTOMER VALUES (27,'Apple Inc.',3);
+INSERT INTO CUSTOMER VALUES (28,NULL,4);
+INSERT INTO CUSTOMER VALUES (29,NULL,5);
+INSERT INTO CUSTOMER VALUES (30,NULL,4);
+INSERT INTO CUSTOMER VALUES (31,NULL,4);
+INSERT INTO CUSTOMER VALUES (32,NULL,3);
+INSERT INTO CUSTOMER VALUES (33,NULL,5);
+INSERT INTO CUSTOMER VALUES (34,NULL,4);
+INSERT INTO CUSTOMER VALUES (35,NULL,4);
+INSERT INTO CUSTOMER VALUES (36,NULL,5);
+INSERT INTO CUSTOMER VALUES (37,NULL,3);
+INSERT INTO CUSTOMER VALUES (38,NULL,3);
+INSERT INTO CUSTOMER VALUES (39,NULL,5);
+INSERT INTO CUSTOMER VALUES (40,NULL,4);
+
+
+INSERT INTO INVOICE VALUES (1,9,'2009-01-01 00:00:00','Theodor-Heuss-Straße 34','Stuttgart',NULL,'Germany','70174',1.98);
+INSERT INTO INVOICE VALUES (2,10,'2009-01-02 00:00:00','Ullevålsveien 14','Oslo',NULL,'Norway','0171',3.96);
+INSERT INTO INVOICE VALUES (3,11,'2009-01-03 00:00:00','Grétrystraat 63','Brussels',NULL,'Belgium','1000',5.94);
+INSERT INTO INVOICE VALUES (4,12,'2009-01-06 00:00:00','8210 111 ST NW','Edmonton','AB','Canada','T6G 2C7',8.91);
+INSERT INTO INVOICE VALUES (5,13,'2009-01-11 00:00:00','69 Salem Street','Boston','MA','USA','2113',13.86);
+INSERT INTO INVOICE VALUES (6,14,'2009-01-19 00:00:00','Berger Straße 10','Frankfurt',NULL,'Germany','60316',0.99);
+INSERT INTO INVOICE VALUES (7,15,'2009-02-01 00:00:00','Barbarossastraße 19','Berlin',NULL,'Germany','10779',1.98);
+INSERT INTO INVOICE VALUES (8,16,'2009-02-01 00:00:00','8, Rue Hanovre','Paris',NULL,'France','75002',1.98);
+INSERT INTO INVOICE VALUES (9,17,'2009-02-02 00:00:00','9, Place Louis Barthou','Bordeaux',NULL,'France','33000',3.96);
+INSERT INTO INVOICE VALUES (10,18,'2009-02-03 00:00:00','3 Chatham Street','Dublin','Dublin','Ireland',NULL,5.94);
+INSERT INTO INVOICE VALUES (11,19,'2009-02-06 00:00:00','202 Hoxton Street','London',NULL,'United Kingdom','N1 5LH',8.91);
+INSERT INTO INVOICE VALUES (12,20,'2009-02-11 00:00:00','Theodor-Heuss-Straße 34','Stuttgart',NULL,'Germany','70174',13.86);
+INSERT INTO INVOICE VALUES (13,21,'2009-02-19 00:00:00','1600 Amphitheatre Parkway','Mountain View','CA','USA','94043-1351',0.99);
+INSERT INTO INVOICE VALUES (14,22,'2009-03-04 00:00:00','1 Microsoft Way','Redmond','WA','USA','98052-8300',1.98);
+INSERT INTO INVOICE VALUES (15,23,'2009-03-04 00:00:00','1 Infinite Loop','Cupertino','CA','USA','95014',1.98);
+INSERT INTO INVOICE VALUES (16,24,'2009-03-05 00:00:00','801 W 4th Street','Reno','NV','USA','89503',3.96);
+INSERT INTO INVOICE VALUES (17,25,'2009-03-06 00:00:00','319 N. Frances Street','Madison','WI','USA','53703',5.94);
+INSERT INTO INVOICE VALUES (18,26,'2009-03-09 00:00:00','194A Chain Lake Drive','Halifax','NS','Canada','B3S 1C5',8.91);
+INSERT INTO INVOICE VALUES (19,27,'2009-03-14 00:00:00','8, Rue Hanovre','Paris',NULL,'France','75002',13.86);
+INSERT INTO INVOICE VALUES (20,28,'2009-03-22 00:00:00','110 Raeburn Pl','Edinburgh ',NULL,'United Kingdom','EH4 1HH',0.99);
+INSERT INTO INVOICE VALUES (21,29,'2009-04-04 00:00:00','421 Bourke Street','Sidney','NSW','Australia','2010',1.98);
+INSERT INTO INVOICE VALUES (22,30,'2009-04-04 00:00:00','Calle Lira, 198','Santiago',NULL,'Chile',NULL,1.98);
+INSERT INTO INVOICE VALUES (23,31,'2009-04-05 00:00:00','3,Raj Bhavan Road','Bangalore',NULL,'India','560001',3.96);
+INSERT INTO INVOICE VALUES (24,32,'2009-04-06 00:00:00','Ullevålsveien 14','Oslo',NULL,'Norway','0171',5.94);
+INSERT INTO INVOICE VALUES (25,33,'2009-04-09 00:00:00','Rua Dr. Falcão Filho, 155','São Paulo','SP','Brazil','01007-010',8.91);
+INSERT INTO INVOICE VALUES (26,34,'2009-04-14 00:00:00','1 Infinite Loop','Cupertino','CA','USA','95014',13.86);
+INSERT INTO INVOICE VALUES (27,35,'2009-04-22 00:00:00','5112 48 Street','Yellowknife','NT','Canada','X1A 1N6',0.99);
+INSERT INTO INVOICE VALUES (28,36,'2009-05-05 00:00:00','Rua da Assunção 53','Lisbon',NULL,'Portugal',NULL,1.98);
+INSERT INTO INVOICE VALUES (29,37,'2009-05-05 00:00:00','Tauentzienstraße 8','Berlin',NULL,'Germany','10789',1.98);
+INSERT INTO INVOICE VALUES (30,38,'2009-05-06 00:00:00','Barbarossastraße 19','Berlin',NULL,'Germany','10779',3.96);
+INSERT INTO INVOICE VALUES (31,39,'2009-05-07 00:00:00','9, Place Louis Barthou','Bordeaux',NULL,'France','33000',5.94);
+INSERT INTO INVOICE VALUES (32,40,'2009-05-10 00:00:00','Lijnbaansgracht 120bg','Amsterdam','VV','Netherlands','1016',8.91);
+INSERT INTO INVOICE VALUES (33,9,'2009-05-15 00:00:00','Calle Lira, 198','Santiago',NULL,'Chile',NULL,13.86);
+INSERT INTO INVOICE VALUES (34,10,'2009-05-23 00:00:00','Praça Pio X, 119','Rio de Janeiro','RJ','Brazil','20040-020',0.99);
+INSERT INTO INVOICE VALUES (35,11,'2009-06-05 00:00:00','Qe 7 Bloco G','Brasília','DF','Brazil','71020-677',1.98);
+INSERT INTO INVOICE VALUES (36,12,'2009-06-05 00:00:00','700 W Pender Street','Vancouver','BC','Canada','V6C 1G8',1.98);
+INSERT INTO INVOICE VALUES (37,17,'2009-06-06 00:00:00','1 Microsoft Way','Redmond','WA','USA','98052-8300',3.96);
+INSERT INTO INVOICE VALUES (38,21,'2009-06-07 00:00:00','801 W 4th Street','Reno','NV','USA','89503',5.94);
+INSERT INTO INVOICE VALUES (39,27,'2009-06-10 00:00:00','1033 N Park Ave','Tucson','AZ','USA','85719',8.91);
+INSERT INTO INVOICE VALUES (40,36,'2009-06-15 00:00:00','Tauentzienstraße 8','Berlin',NULL,'Germany','10789',13.86);
+INSERT INTO INVOICE VALUES (41,32,'2009-06-23 00:00:00','C/ San Bernardo 85','Madrid',NULL,'Spain','28015',0.99);
+INSERT INTO INVOICE VALUES (42,31,'2009-07-06 00:00:00','Celsiusg. 9','Stockholm',NULL,'Sweden','11230',1.98);
+INSERT INTO INVOICE VALUES (43,10,'2009-07-06 00:00:00','113 Lupus St','London',NULL,'United Kingdom','SW1V 3EN',1.98);
+INSERT INTO INVOICE VALUES (44,9,'2009-07-07 00:00:00','421 Bourke Street','Sidney','NSW','Australia','2010',3.96);
+INSERT INTO INVOICE VALUES (45,18,'2009-07-08 00:00:00','3,Raj Bhavan Road','Bangalore',NULL,'India','560001',5.94);
+INSERT INTO INVOICE VALUES (46,16,'2009-07-11 00:00:00','Rilská 3174/6','Prague',NULL,'Czech Republic','14300',8.91);
+INSERT INTO INVOICE VALUES (47,15,'2009-07-16 00:00:00','700 W Pender Street','Vancouver','BC','Canada','V6C 1G8',13.86);
+INSERT INTO INVOICE VALUES (48,29,'2009-07-24 00:00:00','796 Dundas Street West','Toronto','ON','Canada','M6J 1V1',0.99);
+INSERT INTO INVOICE VALUES (49,30,'2009-08-06 00:00:00','230 Elgin Street','Ottawa','ON','Canada','K2P 1L7',1.98);
+INSERT INTO INVOICE VALUES (50,32,'2009-08-06 00:00:00','696 Osborne Street','Winnipeg','MB','Canada','R3L 2B9',1.98);
+
+
+INSERT INTO PLAYLIST VALUES (1,'Music');
+INSERT INTO PLAYLIST VALUES (2,'Movies');
+INSERT INTO PLAYLIST VALUES (3,'TV Shows');
+INSERT INTO PLAYLIST VALUES (4,'Audiobooks');
+INSERT INTO PLAYLIST VALUES (5,'90’s Music');
+INSERT INTO PLAYLIST VALUES (6,'Audiobooks');
+INSERT INTO PLAYLIST VALUES (7,'Movies');
+INSERT INTO PLAYLIST VALUES (8,'Music');
+INSERT INTO PLAYLIST VALUES (9,'Music Videos');
+INSERT INTO PLAYLIST VALUES (10,'TV Shows');
+INSERT INTO PLAYLIST VALUES (11,'Brazilian Music');
+INSERT INTO PLAYLIST VALUES (12,'Classical');
+INSERT INTO PLAYLIST VALUES (13,'Classical 101 - Deep Cuts');
+INSERT INTO PLAYLIST VALUES (14,'Classical 101 - Next Steps');
+INSERT INTO PLAYLIST VALUES (15,'Classical 101 - The Basics');
+INSERT INTO PLAYLIST VALUES (16,'Grunge');
+INSERT INTO PLAYLIST VALUES (17,'Heavy Metal Classic');
+INSERT INTO PLAYLIST VALUES (18,'On-The-Go 1');
+
+
+INSERT INTO MEDIATYPE VALUES (1,'MPEG audio file');
+INSERT INTO MEDIATYPE VALUES (2,'Protected AAC audio file');
+INSERT INTO MEDIATYPE VALUES (3,'Protected MPEG-4 video file');
+INSERT INTO MEDIATYPE VALUES (4,'Purchased AAC audio file');
+INSERT INTO MEDIATYPE VALUES (5,'AAC audio file');
+
+
+
+INSERT INTO GENRE VALUES (1,'Rock');
+INSERT INTO GENRE VALUES (2,'Jazz');
+INSERT INTO GENRE VALUES (3,'Metal');
+INSERT INTO GENRE VALUES (4,'Alternative & Punk');
+INSERT INTO GENRE VALUES (5,'Rock And Roll');
+INSERT INTO GENRE VALUES (6,'Blues');
+INSERT INTO GENRE VALUES (7,'Latin');
+INSERT INTO GENRE VALUES (8,'Reggae');
+INSERT INTO GENRE VALUES (9,'Pop');
+INSERT INTO GENRE VALUES (10,'Soundtrack');
+INSERT INTO GENRE VALUES (11,'Bossa Nova');
+INSERT INTO GENRE VALUES (12,'Easy Listening');
+INSERT INTO GENRE VALUES (13,'Heavy Metal');
+INSERT INTO GENRE VALUES (14,'R&B/Soul');
+INSERT INTO GENRE VALUES (15,'Electronica/Dance');
+INSERT INTO GENRE VALUES (16,'World');
+INSERT INTO GENRE VALUES (17,'Hip Hop/Rap');
+INSERT INTO GENRE VALUES (18,'Science Fiction');
+INSERT INTO GENRE VALUES (19,'TV Shows');
+INSERT INTO GENRE VALUES (20,'Sci Fi & Fantasy');
+INSERT INTO GENRE VALUES (21,'Drama');
+INSERT INTO GENRE VALUES (22,'Comedy');
+INSERT INTO GENRE VALUES (23,'Alternative');
+INSERT INTO GENRE VALUES (24,'Classical');
+INSERT INTO GENRE VALUES (25,'Opera');
+
+
+INSERT INTO ARTIST VALUES (1,'AC/DC');
+INSERT INTO ARTIST VALUES (2,'Accept');
+INSERT INTO ARTIST VALUES (3,'Aerosmith');
+INSERT INTO ARTIST VALUES (4,'Alanis Morissette');
+INSERT INTO ARTIST VALUES (5,'Alice In Chains');
+INSERT INTO ARTIST VALUES (6,'Antônio Carlos Jobim');
+INSERT INTO ARTIST VALUES (7,'Apocalyptica');
+INSERT INTO ARTIST VALUES (8,'Audioslave');
+INSERT INTO ARTIST VALUES (9,'BackBeat');
+INSERT INTO ARTIST VALUES (10,'Billy Cobham');
+INSERT INTO ARTIST VALUES (11,'Black Label Society');
+INSERT INTO ARTIST VALUES (12,'Black Sabbath');
+INSERT INTO ARTIST VALUES (13,'Body Count');
+INSERT INTO ARTIST VALUES (14,'Bruce Dickinson');
+INSERT INTO ARTIST VALUES (15,'Buddy Guy');
+INSERT INTO ARTIST VALUES (16,'Caetano Veloso');
+INSERT INTO ARTIST VALUES (17,'Chico Buarque');
+INSERT INTO ARTIST VALUES (18,'Chico Science & Nação Zumbi');
+INSERT INTO ARTIST VALUES (19,'Cidade Negra');
+INSERT INTO ARTIST VALUES (20,'Cláudio Zoli');
+INSERT INTO ARTIST VALUES (21,'Various Artists');
+INSERT INTO ARTIST VALUES (22,'Led Zeppelin');
+INSERT INTO ARTIST VALUES (23,'Frank Zappa & Captain Beefheart');
+INSERT INTO ARTIST VALUES (24,'Marcos Valle');
+INSERT INTO ARTIST VALUES (25,'Milton Nascimento & Bebeto');
+INSERT INTO ARTIST VALUES (26,'Azymuth');
+INSERT INTO ARTIST VALUES (27,'Gilberto Gil');
+INSERT INTO ARTIST VALUES (28,'João Gilberto');
+INSERT INTO ARTIST VALUES (29,'Bebel Gilberto');
+INSERT INTO ARTIST VALUES (30,'Jorge Vercilo');
+INSERT INTO ARTIST VALUES (31,'Baby Consuelo');
+INSERT INTO ARTIST VALUES (32,'Ney Matogrosso');
+INSERT INTO ARTIST VALUES (33,'Luiz Melodia');
+INSERT INTO ARTIST VALUES (34,'Nando Reis');
+INSERT INTO ARTIST VALUES (35,'Pedro Luís & A Parede');
+INSERT INTO ARTIST VALUES (36,'O Rappa');
+INSERT INTO ARTIST VALUES (37,'Ed Motta');
+INSERT INTO ARTIST VALUES (38,'Banda Black Rio');
+INSERT INTO ARTIST VALUES (39,'Fernanda Porto');
+INSERT INTO ARTIST VALUES (40,'Os Cariocas');
+INSERT INTO ARTIST VALUES (41,'Elis Regina');
+INSERT INTO ARTIST VALUES (42,'Milton Nascimento');
+INSERT INTO ARTIST VALUES (43,'A Cor Do Som');
+INSERT INTO ARTIST VALUES (44,'Kid Abelha');
+INSERT INTO ARTIST VALUES (45,'Sandra De Sá');
+INSERT INTO ARTIST VALUES (46,'Jorge Ben');
+INSERT INTO ARTIST VALUES (47,'Hermeto Pascoal');
+INSERT INTO ARTIST VALUES (48,'Barão Vermelho');
+INSERT INTO ARTIST VALUES (49,'Edson, DJ Marky & DJ Patife Featuring Fernanda Porto');
+INSERT INTO ARTIST VALUES (50,'Metallica');
+INSERT INTO ARTIST VALUES (51,'Queen');
+INSERT INTO ARTIST VALUES (52,'Kiss');
+INSERT INTO ARTIST VALUES (53,'Spyro Gyra');
+INSERT INTO ARTIST VALUES (54,'Green Day');
+INSERT INTO ARTIST VALUES (55,'David Coverdale');
+INSERT INTO ARTIST VALUES (56,'Gonzaguinha');
+INSERT INTO ARTIST VALUES (57,'Os Mutantes');
+INSERT INTO ARTIST VALUES (58,'Deep Purple');
+INSERT INTO ARTIST VALUES (59,'Santana');
+INSERT INTO ARTIST VALUES (60,'Santana Feat. Dave Matthews');
+
+
+
+INSERT INTO ALBUM VALUES (1,'For Those About To Rock We Salute You',1);
+INSERT INTO ALBUM VALUES (2,'Balls to the Wall',2);
+INSERT INTO ALBUM VALUES (3,'Restless and Wild',2);
+INSERT INTO ALBUM VALUES (4,'Let There Be Rock',1);
+INSERT INTO ALBUM VALUES (5,'Big Ones',3);
+INSERT INTO ALBUM VALUES (6,'Jagged Little Pill',4);
+INSERT INTO ALBUM VALUES (7,'Facelift',5);
+INSERT INTO ALBUM VALUES (8,'Warner 25 Anos',6);
+INSERT INTO ALBUM VALUES (9,'Plays Metallica By Four Cellos',7);
+INSERT INTO ALBUM VALUES (10,'Audioslave',8);
+INSERT INTO ALBUM VALUES (11,'Out Of Exile',8);
+INSERT INTO ALBUM VALUES (12,'BackBeat Soundtrack',9);
+INSERT INTO ALBUM VALUES (13,'The Best Of Billy Cobham',10);
+INSERT INTO ALBUM VALUES (14,'Alcohol Fueled Brewtality Live! [Disc 1]',11);
+INSERT INTO ALBUM VALUES (15,'Alcohol Fueled Brewtality Live! [Disc 2]',11);
+INSERT INTO ALBUM VALUES (16,'Black Sabbath',12);
+INSERT INTO ALBUM VALUES (17,'Black Sabbath Vol. 4 (Remaster)',12);
+INSERT INTO ALBUM VALUES (18,'Body Count',13);
+INSERT INTO ALBUM VALUES (19,'Chemical Wedding',14);
+INSERT INTO ALBUM VALUES (20,'The Best Of Buddy Guy - The Millenium Collection',15);
+INSERT INTO ALBUM VALUES (21,'Prenda Minha',16);
+INSERT INTO ALBUM VALUES (22,'Sozinho Remix Ao Vivo',16);
+INSERT INTO ALBUM VALUES (23,'Minha Historia',17);
+INSERT INTO ALBUM VALUES (24,'Afrociberdelia',18);
+INSERT INTO ALBUM VALUES (25,'Da Lama Ao Caos',18);
+INSERT INTO ALBUM VALUES (26,'Acústico MTV [Live]',19);
+INSERT INTO ALBUM VALUES (27,'Cidade Negra - Hits',19);
+INSERT INTO ALBUM VALUES (28,'Na Pista',20);
+INSERT INTO ALBUM VALUES (29,'Axé Bahia 2001',21);
+INSERT INTO ALBUM VALUES (30,'BBC Sessions [Disc 1] [Live]',22);
+INSERT INTO ALBUM VALUES (31,'Bongo Fury',23);
+INSERT INTO ALBUM VALUES (32,'Carnaval 2001',21);
+INSERT INTO ALBUM VALUES (33,'Chill: Brazil (Disc 1)',24);
+INSERT INTO ALBUM VALUES (34,'Chill: Brazil (Disc 2)',6);
+INSERT INTO ALBUM VALUES (35,'Garage Inc. (Disc 1)',50);
+INSERT INTO ALBUM VALUES (36,'Greatest Hits II',51);
+INSERT INTO ALBUM VALUES (37,'Greatest Kiss',52);
+INSERT INTO ALBUM VALUES (38,'Heart of the Night',53);
+INSERT INTO ALBUM VALUES (39,'International Superhits',54);
+INSERT INTO ALBUM VALUES (40,'Into The Light',55);
+
+
+
+
+INSERT INTO TRACK VALUES (1,'For Those About To Rock (We Salute You)',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',343719,11170334,0.99);
+INSERT INTO TRACK VALUES (2,'Balls to the Wall',2,2,1,NULL,342562,5510424,0.99);
+INSERT INTO TRACK VALUES (3,'Fast As a Shark',3,2,1,'F. Baltes, S. Kaufman, U. Dirkscneider & W. Hoffman',230619,3990994,0.99);
+INSERT INTO TRACK VALUES (4,'Restless and Wild',3,2,1,'F. Baltes, R.A. Smith-Diesel, S. Kaufman, U. Dirkscneider & W. Hoffman',252051,4331779,0.99);
+INSERT INTO TRACK VALUES (5,'Princess of the Dawn',3,2,1,'Deaffy & R.A. Smith-Diesel',375418,6290521,0.99);
+INSERT INTO TRACK VALUES (6,'Put The Finger On You',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',205662,6713451,0.99);
+INSERT INTO TRACK VALUES (7,'Let''s Get It Up',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',233926,7636561,0.99);
+INSERT INTO TRACK VALUES (8,'Inject The Venom',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',210834,6852860,0.99);
+INSERT INTO TRACK VALUES (9,'Snowballed',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',203102,6599424,0.99);
+INSERT INTO TRACK VALUES (10,'Evil Walks',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',263497,8611245,0.99);
+INSERT INTO TRACK VALUES (11,'C.O.D.',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',199836,6566314,0.99);
+INSERT INTO TRACK VALUES (12,'Breaking The Rules',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',263288,8596840,0.99);
+INSERT INTO TRACK VALUES (13,'Night Of The Long Knives',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',205688,6706347,0.99);
+INSERT INTO TRACK VALUES (14,'Spellbound',1,1,1,'Angus Young, Malcolm Young, Brian Johnson',270863,8817038,0.99);
+INSERT INTO TRACK VALUES (15,'Go Down',4,1,1,'AC/DC',331180,10847611,0.99);
+INSERT INTO TRACK VALUES (16,'Dog Eat Dog',4,1,1,'AC/DC',215196,7032162,0.99);
+INSERT INTO TRACK VALUES (17,'Let There Be Rock',4,1,1,'AC/DC',366654,12021261,0.99);
+INSERT INTO TRACK VALUES (18,'Bad Boy Boogie',4,1,1,'AC/DC',267728,8776140,0.99);
+INSERT INTO TRACK VALUES (19,'Problem Child',4,1,1,'AC/DC',325041,10617116,0.99);
+INSERT INTO TRACK VALUES (20,'Overdose',4,1,1,'AC/DC',369319,12066294,0.99);
+INSERT INTO TRACK VALUES (21,'Hell Ain''t A Bad Place To Be',4,1,1,'AC/DC',254380,8331286,0.99);
+INSERT INTO TRACK VALUES (22,'Whole Lotta Rosie',4,1,1,'AC/DC',323761,10547154,0.99);
+INSERT INTO TRACK VALUES (23,'Walk On Water',5,1,1,'Steven Tyler, Joe Perry, Jack Blades, Tommy Shaw',295680,9719579,0.99);
+INSERT INTO TRACK VALUES (24,'Love In An Elevator',5,1,1,'Steven Tyler, Joe Perry',321828,10552051,0.99);
+INSERT INTO TRACK VALUES (25,'Rag Doll',5,1,1,'Steven Tyler, Joe Perry, Jim Vallance, Holly Knight',264698,8675345,0.99);
+INSERT INTO TRACK VALUES (26,'What It Takes',5,1,1,'Steven Tyler, Joe Perry, Desmond Child',310622,10144730,0.99);
+INSERT INTO TRACK VALUES (27,'Dude (Looks Like A Lady)',5,1,1,'Steven Tyler, Joe Perry, Desmond Child',264855,8679940,0.99);
+INSERT INTO TRACK VALUES (28,'Janie''s Got A Gun',5,1,1,'Steven Tyler, Tom Hamilton',330736,10869391,0.99);
+INSERT INTO TRACK VALUES (29,'Cryin',5,1,1,'Steen Tyler, Joe Perry, Taylor Rhodes',309263,10056995,0.99);
+INSERT INTO TRACK VALUES (30,'Amazing',5,1,1,'Steven Tyler, Richie Supa',356519,11616195,0.99);
+INSERT INTO TRACK VALUES (31,'Blind Man',5,1,1,'Steven Tyler, Joe Perry, Taylor Rhodes',240718,7877453,0.99);
+INSERT INTO TRACK VALUES (32,'Deuces Are Wild',5,1,1,'Steven Tyler, Jim Vallance',215875,7074167,0.99);
+INSERT INTO TRACK VALUES (33,'The Other Side',5,1,1,'Steven Tyler, Jim Vallance',244375,7983270,0.99);
+INSERT INTO TRACK VALUES (34,'Crazy',5,1,1,'Steven Tyler, Joe Perry, Desmond Child',316656,10402398,0.99);
+INSERT INTO TRACK VALUES (35,'Eat The Rich',5,1,1,'Steven Tyler, Joe Perry, Jim Vallance',251036,8262039,0.99);
+INSERT INTO TRACK VALUES (36,'Angel',5,1,1,'Steven Tyler, Desmond Child',307617,9989331,0.99);
+INSERT INTO TRACK VALUES (37,'Livin On The Edge',5,1,1,'Steven Tyler, Joe Perry, Mark Hudson',381231,12374569,0.99);
+INSERT INTO TRACK VALUES (38,'All I Really Want',6,1,1,'Alanis Morissette & Glenn Ballard',284891,9375567,0.99);
+INSERT INTO TRACK VALUES (39,'You Oughta Know',6,1,1,'Alanis Morissette & Glenn Ballard',249234,8196916,0.99);
+INSERT INTO TRACK VALUES (40,'Perfect',6,1,1,'Alanis Morissette & Glenn Ballard',188133,6145404,0.99);
+INSERT INTO TRACK VALUES (41,'Hand In My Pocket',6,1,1,'Alanis Morissette & Glenn Ballard',221570,7224246,0.99);
+INSERT INTO TRACK VALUES (42,'Right Through You',6,1,1,'Alanis Morissette & Glenn Ballard',176117,5793082,0.99);
+INSERT INTO TRACK VALUES (43,'Forgiven',6,1,1,'Alanis Morissette & Glenn Ballard',300355,9753256,0.99);
+INSERT INTO TRACK VALUES (44,'You Learn',6,1,1,'Alanis Morissette & Glenn Ballard',239699,7824837,0.99);
+INSERT INTO TRACK VALUES (45,'Head Over Feet',6,1,1,'Alanis Morissette & Glenn Ballard',267493,8758008,0.99);
+INSERT INTO TRACK VALUES (46,'Mary Jane',6,1,1,'Alanis Morissette & Glenn Ballard',280607,9163588,0.99);
+INSERT INTO TRACK VALUES (47,'Ironic',6,1,1,'Alanis Morissette & Glenn Ballard',229825,7598866,0.99);
+INSERT INTO TRACK VALUES (48,'Not The Doctor',6,1,1,'Alanis Morissette & Glenn Ballard',227631,7604601,0.99);
+INSERT INTO TRACK VALUES (49,'Wake Up',6,1,1,'Alanis Morissette & Glenn Ballard',293485,9703359,0.99);
+INSERT INTO TRACK VALUES (50,'You Oughta Know (Alternate)',6,1,1,'Alanis Morissette & Glenn Ballard',491885,16008629,0.99);
+INSERT INTO TRACK VALUES (51,'We Die Young',7,1,1,'Jerry Cantrell',152084,4925362,0.99);
+INSERT INTO TRACK VALUES (52,'Man In The Box',7,1,1,'Jerry Cantrell, Layne Staley',286641,9310272,0.99);
+INSERT INTO TRACK VALUES (53,'Sea Of Sorrow',7,1,1,'Jerry Cantrell',349831,11316328,0.99);
+INSERT INTO TRACK VALUES (54,'Bleed The Freak',7,1,1,'Jerry Cantrell',241946,7847716,0.99);
+INSERT INTO TRACK VALUES (55,'I Can''t Remember',7,1,1,'Jerry Cantrell, Layne Staley',222955,7302550,0.99);
+INSERT INTO TRACK VALUES (56,'Love, Hate, Love',7,1,1,'Jerry Cantrell, Layne Staley',387134,12575396,0.99);
+INSERT INTO TRACK VALUES (57,'It Ain''t Like That',7,1,1,'Jerry Cantrell, Michael Starr, Sean Kinney',277577,8993793,0.99);
+INSERT INTO TRACK VALUES (58,'Sunshine',7,1,1,'Jerry Cantrell',284969,9216057,0.99);
+INSERT INTO TRACK VALUES (59,'Put You Down',7,1,1,'Jerry Cantrell',196231,6420530,0.99);
+INSERT INTO TRACK VALUES (60,'Confusion',7,1,1,'Jerry Cantrell, Michael Starr, Layne Staley',344163,11183647,0.99);
+INSERT INTO TRACK VALUES (61,'I Know Somethin (Bout You)',7,1,1,'Jerry Cantrell',261955,8497788,0.99);
+INSERT INTO TRACK VALUES (62,'Real Thing',7,1,1,'Jerry Cantrell, Layne Staley',243879,7937731,0.99);
+INSERT INTO TRACK VALUES (63,'Desafinado',8,1,2,NULL,185338,5990473,0.99);
+INSERT INTO TRACK VALUES (64,'Garota De Ipanema',8,1,2,NULL,285048,9348428,0.99);
+INSERT INTO TRACK VALUES (65,'Samba De Uma Nota Só (One Note Samba)',8,1,2,NULL,137273,4535401,0.99);
+INSERT INTO TRACK VALUES (66,'Por Causa De Você',8,1,2,NULL,169900,5536496,0.99);
+INSERT INTO TRACK VALUES (67,'Ligia',8,1,2,NULL,251977,8226934,0.99);
+INSERT INTO TRACK VALUES (68,'Fotografia',8,1,2,NULL,129227,4198774,0.99);
+INSERT INTO TRACK VALUES (69,'Dindi (Dindi)',8,1,2,NULL,253178,8149148,0.99);
+INSERT INTO TRACK VALUES (70,'Se Todos Fossem Iguais A Você (Instrumental)',8,1,2,NULL,134948,4393377,0.99);
+INSERT INTO TRACK VALUES (71,'Falando De Amor',8,1,2,NULL,219663,7121735,0.99);
+INSERT INTO TRACK VALUES (72,'Angela',8,1,2,NULL,169508,5574957,0.99);
+INSERT INTO TRACK VALUES (73,'Corcovado (Quiet Nights Of Quiet Stars)',8,1,2,NULL,205662,6687994,0.99);
+INSERT INTO TRACK VALUES (74,'Outra Vez',8,1,2,NULL,126511,4110053,0.99);
+INSERT INTO TRACK VALUES (75,'O Boto (Bôto)',8,1,2,NULL,366837,12089673,0.99);
+INSERT INTO TRACK VALUES (76,'Canta, Canta Mais',8,1,2,NULL,271856,8719426,0.99);
+INSERT INTO TRACK VALUES (77,'Enter Sandman',9,1,3,'Apocalyptica',221701,7286305,0.99);
+INSERT INTO TRACK VALUES (78,'Master Of Puppets',9,1,3,'Apocalyptica',436453,14375310,0.99);
+INSERT INTO TRACK VALUES (79,'Harvester Of Sorrow',9,1,3,'Apocalyptica',374543,12372536,0.99);
+INSERT INTO TRACK VALUES (80,'The Unforgiven',9,1,3,'Apocalyptica',322925,10422447,0.99);
+INSERT INTO TRACK VALUES (81,'Sad But True',9,1,3,'Apocalyptica',288208,9405526,0.99);
+INSERT INTO TRACK VALUES (82,'Creeping Death',9,1,3,'Apocalyptica',308035,10110980,0.99);
+INSERT INTO TRACK VALUES (83,'Wherever I May Roam',9,1,3,'Apocalyptica',369345,12033110,0.99);
+INSERT INTO TRACK VALUES (84,'Welcome Home (Sanitarium)',9,1,3,'Apocalyptica',350197,11406431,0.99);
+INSERT INTO TRACK VALUES (85,'Cochise',10,1,1,'Audioslave/Chris Cornell',222380,5339931,0.99);
+INSERT INTO TRACK VALUES (86,'Show Me How to Live',10,1,1,'Audioslave/Chris Cornell',277890,6672176,0.99);
+INSERT INTO TRACK VALUES (87,'Gasoline',10,1,1,'Audioslave/Chris Cornell',279457,6709793,0.99);
+INSERT INTO TRACK VALUES (88,'What You Are',10,1,1,'Audioslave/Chris Cornell',249391,5988186,0.99);
+INSERT INTO TRACK VALUES (89,'Like a Stone',10,1,1,'Audioslave/Chris Cornell',294034,7059624,0.99);
+INSERT INTO TRACK VALUES (90,'Set It Off',10,1,1,'Audioslave/Chris Cornell',263262,6321091,0.99);
+INSERT INTO TRACK VALUES (91,'Shadow on the Sun',10,1,1,'Audioslave/Chris Cornell',343457,8245793,0.99);
+INSERT INTO TRACK VALUES (92,'I am the Highway',10,1,1,'Audioslave/Chris Cornell',334942,8041411,0.99);
+INSERT INTO TRACK VALUES (93,'Exploder',10,1,1,'Audioslave/Chris Cornell',206053,4948095,0.99);
+INSERT INTO TRACK VALUES (94,'Hypnotize',10,1,1,'Audioslave/Chris Cornell',206628,4961887,0.99);
+INSERT INTO TRACK VALUES (95,'Bring''em Back Alive',10,1,1,'Audioslave/Chris Cornell',329534,7911634,0.99);
+INSERT INTO TRACK VALUES (96,'Light My Way',10,1,1,'Audioslave/Chris Cornell',303595,7289084,0.99);
+INSERT INTO TRACK VALUES (97,'Getaway Car',10,1,1,'Audioslave/Chris Cornell',299598,7193162,0.99);
+INSERT INTO TRACK VALUES (98,'The Last Remaining Light',10,1,1,'Audioslave/Chris Cornell',317492,7622615,0.99);
+INSERT INTO TRACK VALUES (99,'Your Time Has Come',11,1,4,'Cornell, Commerford, Morello, Wilk',255529,8273592,0.99);
+INSERT INTO TRACK VALUES (100,'Out Of Exile',11,1,4,'Cornell, Commerford, Morello, Wilk',291291,9506571,0.99);
+INSERT INTO TRACK VALUES (101,'Be Yourself',11,1,4,'Cornell, Commerford, Morello, Wilk',279484,9106160,0.99);
+INSERT INTO TRACK VALUES (102,'Doesn''t Remind Me',11,1,4,'Cornell, Commerford, Morello, Wilk',255869,8357387,0.99);
+INSERT INTO TRACK VALUES (103,'Drown Me Slowly',11,1,4,'Cornell, Commerford, Morello, Wilk',233691,7609178,0.99);
+INSERT INTO TRACK VALUES (104,'Heaven''s Dead',11,1,4,'Cornell, Commerford, Morello, Wilk',276688,9006158,0.99);
+INSERT INTO TRACK VALUES (105,'The Worm',11,1,4,'Cornell, Commerford, Morello, Wilk',237714,7710800,0.99);
+INSERT INTO TRACK VALUES (106,'Man Or Animal',11,1,4,'Cornell, Commerford, Morello, Wilk',233195,7542942,0.99);
+INSERT INTO TRACK VALUES (107,'Yesterday To Tomorrow',11,1,4,'Cornell, Commerford, Morello, Wilk',273763,8944205,0.99);
+INSERT INTO TRACK VALUES (108,'Dandelion',11,1,4,'Cornell, Commerford, Morello, Wilk',278125,9003592,0.99);
+INSERT INTO TRACK VALUES (109,'#1 Zero',11,1,4,'Cornell, Commerford, Morello, Wilk',299102,9731988,0.99);
+INSERT INTO TRACK VALUES (110,'The Curse',11,1,4,'Cornell, Commerford, Morello, Wilk',309786,10029406,0.99);
+INSERT INTO TRACK VALUES (111,'Money',12,1,5,'Berry Gordy, Jr./Janie Bradford',147591,2365897,0.99);
+INSERT INTO TRACK VALUES (112,'Long Tall Sally',12,1,5,'Enotris Johnson/Little Richard/Robert \"Bumps\" Blackwell',106396,1707084,0.99);
+INSERT INTO TRACK VALUES (113,'Bad Boy',12,1,5,'Larry Williams',116088,1862126,0.99);
+INSERT INTO TRACK VALUES (114,'Twist And Shout',12,1,5,'Bert Russell/Phil Medley',161123,2582553,0.99);
+INSERT INTO TRACK VALUES (115,'Please Mr. Postman',12,1,5,'Brian Holland/Freddie Gorman/Georgia Dobbins/Robert Bateman/William Garrett',137639,2206986,0.99);
+INSERT INTO TRACK VALUES (116,'C''Mon Everybody',12,1,5,'Eddie Cochran/Jerry Capehart',140199,2247846,0.99);
+INSERT INTO TRACK VALUES (117,'Rock ''N'' Roll Music',12,1,5,'Chuck Berry',141923,2276788,0.99);
+INSERT INTO TRACK VALUES (118,'Slow Down',12,1,5,'Larry Williams',163265,2616981,0.99);
+INSERT INTO TRACK VALUES (119,'Roadrunner',12,1,5,'Bo Diddley',143595,2301989,0.99);
+INSERT INTO TRACK VALUES (120,'Carol',12,1,5,'Chuck Berry',143830,2306019,0.99);
+INSERT INTO TRACK VALUES (121,'Good Golly Miss Molly',12,1,5,'Little Richard',106266,1704918,0.99);
+INSERT INTO TRACK VALUES (122,'20 Flight Rock',12,1,5,'Ned Fairchild',107807,1299960,0.99);
+INSERT INTO TRACK VALUES (123,'Quadrant',13,1,2,'Billy Cobham',261851,8538199,0.99);
+INSERT INTO TRACK VALUES (124,'Snoopy''s search-Red baron',13,1,2,'Billy Cobham',456071,15075616,0.99);
+INSERT INTO TRACK VALUES (125,'Spanish moss-\"A sound portrait\"-Spanish moss',13,1,2,'Billy Cobham',248084,8217867,0.99);
+INSERT INTO TRACK VALUES (126,'Moon germs',13,1,2,'Billy Cobham',294060,9714812,0.99);
+INSERT INTO TRACK VALUES (127,'Stratus',13,1,2,'Billy Cobham',582086,19115680,0.99);
+INSERT INTO TRACK VALUES (128,'The pleasant pheasant',13,1,2,'Billy Cobham',318066,10630578,0.99);
+INSERT INTO TRACK VALUES (129,'Solo-Panhandler',13,1,2,'Billy Cobham',246151,8230661,0.99);
+INSERT INTO TRACK VALUES (130,'Do what cha wanna',13,1,2,'George Duke',274155,9018565,0.99);
+INSERT INTO TRACK VALUES (131,'Intro/ Low Down',14,1,3,NULL,323683,10642901,0.99);
+INSERT INTO TRACK VALUES (132,'13 Years Of Grief',14,1,3,NULL,246987,8137421,0.99);
+INSERT INTO TRACK VALUES (133,'Stronger Than Death',14,1,3,NULL,300747,9869647,0.99);
+INSERT INTO TRACK VALUES (134,'All For You',14,1,3,NULL,235833,7726948,0.99);
+INSERT INTO TRACK VALUES (135,'Super Terrorizer',14,1,3,NULL,319373,10513905,0.99);
+INSERT INTO TRACK VALUES (136,'Phoney Smile Fake Hellos',14,1,3,NULL,273606,9011701,0.99);
+INSERT INTO TRACK VALUES (137,'Lost My Better Half',14,1,3,NULL,284081,9355309,0.99);
+INSERT INTO TRACK VALUES (138,'Bored To Tears',14,1,3,NULL,247327,8130090,0.99);
+INSERT INTO TRACK VALUES (139,'A.N.D.R.O.T.A.Z.',14,1,3,NULL,266266,8574746,0.99);
+INSERT INTO TRACK VALUES (140,'Born To Booze',14,1,3,NULL,282122,9257358,0.99);
+INSERT INTO TRACK VALUES (141,'World Of Trouble',14,1,3,NULL,359157,11820932,0.99);
+INSERT INTO TRACK VALUES (142,'No More Tears',14,1,3,NULL,555075,18041629,0.99);
+INSERT INTO TRACK VALUES (143,'The Begining... At Last',14,1,3,NULL,365662,11965109,0.99);
+INSERT INTO TRACK VALUES (144,'Heart Of Gold',15,1,3,NULL,194873,6417460,0.99);
+INSERT INTO TRACK VALUES (145,'Snowblind',15,1,3,NULL,420022,13842549,0.99);
+INSERT INTO TRACK VALUES (146,'Like A Bird',15,1,3,NULL,276532,9115657,0.99);
+INSERT INTO TRACK VALUES (147,'Blood In The Wall',15,1,3,NULL,284368,9359475,0.99);
+INSERT INTO TRACK VALUES (148,'The Beginning...At Last',15,1,3,NULL,271960,8975814,0.99);
+INSERT INTO TRACK VALUES (149,'Black Sabbath',16,1,3,NULL,382066,12440200,0.99);
+INSERT INTO TRACK VALUES (150,'The Wizard',16,1,3,NULL,264829,8646737,0.99);
+INSERT INTO TRACK VALUES (151,'Behind The Wall Of Sleep',16,1,3,NULL,217573,7169049,0.99);
+INSERT INTO TRACK VALUES (152,'N.I.B.',16,1,3,NULL,368770,12029390,0.99);
+INSERT INTO TRACK VALUES (153,'Evil Woman',16,1,3,NULL,204930,6655170,0.99);
+INSERT INTO TRACK VALUES (154,'Sleeping Village',16,1,3,NULL,644571,21128525,0.99);
+INSERT INTO TRACK VALUES (155,'Warning',16,1,3,NULL,212062,6893363,0.99);
+INSERT INTO TRACK VALUES (156,'Wheels Of Confusion / The Straightener',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',494524,16065830,0.99);
+INSERT INTO TRACK VALUES (157,'Tomorrow''s Dream',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',192496,6252071,0.99);
+INSERT INTO TRACK VALUES (158,'Changes',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',286275,9175517,0.99);
+INSERT INTO TRACK VALUES (159,'FX',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',103157,3331776,0.99);
+INSERT INTO TRACK VALUES (160,'Supernaut',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',285779,9245971,0.99);
+INSERT INTO TRACK VALUES (161,'Snowblind',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',331676,10813386,0.99);
+INSERT INTO TRACK VALUES (162,'Cornucopia',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',234814,7653880,0.99);
+INSERT INTO TRACK VALUES (163,'Laguna Sunrise',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',173087,5671374,0.99);
+INSERT INTO TRACK VALUES (164,'St. Vitus Dance',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',149655,4884969,0.99);
+INSERT INTO TRACK VALUES (165,'Under The Sun/Every Day Comes and Goes',17,1,3,'Tony Iommi, Bill Ward, Geezer Butler, Ozzy Osbourne',350458,11360486,0.99);
+INSERT INTO TRACK VALUES (166,'Smoked Pork',18,1,4,NULL,47333,1549074,0.99);
+INSERT INTO TRACK VALUES (167,'Body Count''s In The House',18,1,4,NULL,204251,6715413,0.99);
+INSERT INTO TRACK VALUES (168,'Now Sports',18,1,4,NULL,4884,161266,0.99);
+INSERT INTO TRACK VALUES (169,'Body Count',18,1,4,NULL,317936,10489139,0.99);
+INSERT INTO TRACK VALUES (170,'A Statistic',18,1,4,NULL,6373,211997,0.99);
+INSERT INTO TRACK VALUES (171,'Bowels Of The Devil',18,1,4,NULL,223216,7324125,0.99);
+INSERT INTO TRACK VALUES (172,'The Real Problem',18,1,4,NULL,11650,387360,0.99);
+INSERT INTO TRACK VALUES (173,'KKK Bitch',18,1,4,NULL,173008,5709631,0.99);
+INSERT INTO TRACK VALUES (174,'D Note',18,1,4,NULL,95738,3067064,0.99);
+INSERT INTO TRACK VALUES (175,'Voodoo',18,1,4,NULL,300721,9875962,0.99);
+INSERT INTO TRACK VALUES (176,'The Winner Loses',18,1,4,NULL,392254,12843821,0.99);
+INSERT INTO TRACK VALUES (177,'There Goes The Neighborhood',18,1,4,NULL,350171,11443471,0.99);
+INSERT INTO TRACK VALUES (178,'Oprah',18,1,4,NULL,6635,224313,0.99);
+INSERT INTO TRACK VALUES (179,'Evil Dick',18,1,4,NULL,239020,7828873,0.99);
+INSERT INTO TRACK VALUES (180,'Body Count Anthem',18,1,4,NULL,166426,5463690,0.99);
+INSERT INTO TRACK VALUES (181,'Momma''s Gotta Die Tonight',18,1,4,NULL,371539,12122946,0.99);
+INSERT INTO TRACK VALUES (182,'Freedom Of Speech',18,1,4,NULL,281234,9337917,0.99);
+INSERT INTO TRACK VALUES (183,'King In Crimson',19,1,3,'Roy Z',283167,9218499,0.99);
+INSERT INTO TRACK VALUES (184,'Chemical Wedding',19,1,3,'Roy Z',246177,8022764,0.99);
+INSERT INTO TRACK VALUES (185,'The Tower',19,1,3,'Roy Z',285257,9435693,0.99);
+INSERT INTO TRACK VALUES (186,'Killing Floor',19,1,3,'Adrian Smith',269557,8854240,0.99);
+INSERT INTO TRACK VALUES (187,'Book Of Thel',19,1,3,'Eddie Casillas/Roy Z',494393,16034404,0.99);
+INSERT INTO TRACK VALUES (188,'Gates Of Urizen',19,1,3,'Roy Z',265351,8627004,0.99);
+INSERT INTO TRACK VALUES (189,'Jerusalem',19,1,3,'Roy Z',402390,13194463,0.99);
+INSERT INTO TRACK VALUES (190,'Trupets Of Jericho',19,1,3,'Roy Z',359131,11820908,0.99);
+INSERT INTO TRACK VALUES (191,'Machine Men',19,1,3,'Adrian Smith',341655,11138147,0.99);
+INSERT INTO TRACK VALUES (192,'The Alchemist',19,1,3,'Roy Z',509413,16545657,0.99);
+INSERT INTO TRACK VALUES (193,'Realword',19,1,3,'Roy Z',237531,7802095,0.99);
+INSERT INTO TRACK VALUES (194,'First Time I Met The Blues',20,1,6,'Eurreal Montgomery',140434,4604995,0.99);
+INSERT INTO TRACK VALUES (195,'Let Me Love You Baby',20,1,6,'Willie Dixon',175386,5716994,0.99);
+INSERT INTO TRACK VALUES (196,'Stone Crazy',20,1,6,'Buddy Guy',433397,14184984,0.99);
+INSERT INTO TRACK VALUES (197,'Pretty Baby',20,1,6,'Willie Dixon',237662,7848282,0.99);
+INSERT INTO TRACK VALUES (198,'When My Left Eye Jumps',20,1,6,'Al Perkins/Willie Dixon',235311,7685363,0.99);
+INSERT INTO TRACK VALUES (199,'Leave My Girl Alone',20,1,6,'Buddy Guy',204721,6859518,0.99);
+INSERT INTO TRACK VALUES (200,'She Suits Me To A Tee',20,1,6,'Buddy Guy',136803,4456321,0.99);
+INSERT INTO TRACK VALUES (201,'Keep It To Myself (Aka Keep It To Yourself)',20,1,6,'Sonny Boy Williamson [I]',166060,5487056,0.99);
+INSERT INTO TRACK VALUES (202,'My Time After Awhile',20,1,6,'Robert Geddins/Ron Badger/Sheldon Feinberg',182491,6022698,0.99);
+INSERT INTO TRACK VALUES (203,'Too Many Ways (Alternate)',20,1,6,'Willie Dixon',135053,4459946,0.99);
+INSERT INTO TRACK VALUES (204,'Talkin'' ''Bout Women Obviously',20,1,6,'Amos Blakemore/Buddy Guy',589531,19161377,0.99);
+INSERT INTO TRACK VALUES (205,'Jorge Da Capadócia',21,1,7,'Jorge Ben',177397,5842196,0.99);
+INSERT INTO TRACK VALUES (206,'Prenda Minha',21,1,7,'Tradicional',99369,3225364,0.99);
+INSERT INTO TRACK VALUES (207,'Meditação',21,1,7,'Tom Jobim - Newton Mendoça',148793,4865597,0.99);
+INSERT INTO TRACK VALUES (208,'Terra',21,1,7,'Caetano Veloso',482429,15889054,0.99);
+INSERT INTO TRACK VALUES (209,'Eclipse Oculto',21,1,7,'Caetano Veloso',221936,7382703,0.99);
+INSERT INTO TRACK VALUES (210,'Texto \"Verdade Tropical\"',21,1,7,'Caetano Veloso',84088,2752161,0.99);
+INSERT INTO TRACK VALUES (211,'Bem Devagar',21,1,7,'Gilberto Gil',133172,4333651,0.99);
+INSERT INTO TRACK VALUES (212,'Drão',21,1,7,'Gilberto Gil',156264,5065932,0.99);
+INSERT INTO TRACK VALUES (213,'Saudosismo',21,1,7,'Caetano Veloso',144326,4726981,0.99);
+INSERT INTO TRACK VALUES (214,'Carolina',21,1,7,'Chico Buarque',181812,5924159,0.99);
+INSERT INTO TRACK VALUES (215,'Sozinho',21,1,7,'Peninha',190589,6253200,0.99);
+INSERT INTO TRACK VALUES (216,'Esse Cara',21,1,7,'Caetano Veloso',223111,7217126,0.99);
+INSERT INTO TRACK VALUES (217,'Mel',21,1,7,'Caetano Veloso - Waly Salomão',294765,9854062,0.99);
+INSERT INTO TRACK VALUES (218,'Linha Do Equador',21,1,7,'Caetano Veloso - Djavan',299337,10003747,0.99);
+INSERT INTO TRACK VALUES (219,'Odara',21,1,7,'Caetano Veloso',141270,4704104,0.99);
+INSERT INTO TRACK VALUES (220,'A Luz De Tieta',21,1,7,'Caetano Veloso',251742,8507446,0.99);
+INSERT INTO TRACK VALUES (221,'Atrás Da Verd-E-Rosa Só Não Vai Quem Já Morreu',21,1,7,'David Corrêa - Paulinho Carvalho - Carlos Sena - Bira do Ponto',307252,10364247,0.99);
+INSERT INTO TRACK VALUES (222,'Vida Boa',21,1,7,'Fausto Nilo - Armandinho',281730,9411272,0.99);
+INSERT INTO TRACK VALUES (223,'Sozinho (Hitmakers Classic Mix)',22,1,7,NULL,436636,14462072,0.99);
+INSERT INTO TRACK VALUES (224,'Sozinho (Hitmakers Classic Radio Edit)',22,1,7,NULL,195004,6455134,0.99);
+INSERT INTO TRACK VALUES (225,'Sozinho (Caêdrum ''n'' Bass)',22,1,7,NULL,328071,10975007,0.99);
+INSERT INTO TRACK VALUES (226,'Carolina',23,1,7,NULL,163056,5375395,0.99);
+INSERT INTO TRACK VALUES (227,'Essa Moça Ta Diferente',23,1,7,NULL,167235,5568574,0.99);
+INSERT INTO TRACK VALUES (228,'Vai Passar',23,1,7,NULL,369763,12359161,0.99);
+INSERT INTO TRACK VALUES (229,'Samba De Orly',23,1,7,NULL,162429,5431854,0.99);
+INSERT INTO TRACK VALUES (230,'Bye, Bye Brasil',23,1,7,NULL,283402,9499590,0.99);
+INSERT INTO TRACK VALUES (231,'Atras Da Porta',23,1,7,NULL,189675,6132843,0.99);
+INSERT INTO TRACK VALUES (232,'Tatuagem',23,1,7,NULL,172120,5645703,0.99);
+INSERT INTO TRACK VALUES (233,'O Que Será (À Flor Da Terra)',23,1,7,NULL,167288,5574848,0.99);
+INSERT INTO TRACK VALUES (234,'Morena De Angola',23,1,7,NULL,186801,6373932,0.99);
+INSERT INTO TRACK VALUES (235,'Apesar De Você',23,1,7,NULL,234501,7886937,0.99);
+INSERT INTO TRACK VALUES (236,'A Banda',23,1,7,NULL,132493,4349539,0.99);
+INSERT INTO TRACK VALUES (237,'Minha Historia',23,1,7,NULL,182256,6029673,0.99);
+INSERT INTO TRACK VALUES (238,'Com Açúcar E Com Afeto',23,1,7,NULL,175386,5846442,0.99);
+INSERT INTO TRACK VALUES (239,'Brejo Da Cruz',23,1,7,NULL,214099,7270749,0.99);
+INSERT INTO TRACK VALUES (240,'Meu Caro Amigo',23,1,7,NULL,260257,8778172,0.99);
+INSERT INTO TRACK VALUES (241,'Geni E O Zepelim',23,1,7,NULL,317570,10342226,0.99);
+INSERT INTO TRACK VALUES (242,'Trocando Em Miúdos',23,1,7,NULL,169717,5461468,0.99);
+INSERT INTO TRACK VALUES (243,'Vai Trabalhar Vagabundo',23,1,7,NULL,139154,4693941,0.99);
+INSERT INTO TRACK VALUES (244,'Gota D''água',23,1,7,NULL,153208,5074189,0.99);
+INSERT INTO TRACK VALUES (245,'Construção / Deus Lhe Pague',23,1,7,NULL,383059,12675305,0.99);
+INSERT INTO TRACK VALUES (246,'Mateus Enter',24,1,7,'Chico Science',33149,1103013,0.99);
+INSERT INTO TRACK VALUES (247,'O Cidadão Do Mundo',24,1,7,'Chico Science',200933,6724966,0.99);
+INSERT INTO TRACK VALUES (248,'Etnia',24,1,7,'Chico Science',152555,5061413,0.99);
+INSERT INTO TRACK VALUES (249,'Quilombo Groove [Instrumental]',24,1,7,'Chico Science',151823,5042447,0.99);
+INSERT INTO TRACK VALUES (250,'Macô',24,1,7,'Chico Science',249600,8253934,0.99);
+INSERT INTO TRACK VALUES (251,'Um Passeio No Mundo Livre',24,1,7,'Chico Science',240091,7984291,0.99);
+INSERT INTO TRACK VALUES (252,'Samba Do Lado',24,1,7,'Chico Science',227317,7541688,0.99);
+INSERT INTO TRACK VALUES (253,'Maracatu Atômico',24,1,7,'Chico Science',284264,9670057,0.99);
+INSERT INTO TRACK VALUES (254,'O Encontro De Isaac Asimov Com Santos Dumont No Céu',24,1,7,'Chico Science',99108,3240816,0.99);
+INSERT INTO TRACK VALUES (255,'Corpo De Lama',24,1,7,'Chico Science',232672,7714954,0.99);
+INSERT INTO TRACK VALUES (256,'Sobremesa',24,1,7,'Chico Science',240091,7960868,0.99);
+INSERT INTO TRACK VALUES (257,'Manguetown',24,1,7,'Chico Science',194560,6475159,0.99);
+INSERT INTO TRACK VALUES (258,'Um Satélite Na Cabeça',24,1,7,'Chico Science',126615,4272821,0.99);
+INSERT INTO TRACK VALUES (259,'Baião Ambiental [Instrumental]',24,1,7,'Chico Science',152659,5198539,0.99);
+INSERT INTO TRACK VALUES (260,'Sangue De Bairro',24,1,7,'Chico Science',132231,4415557,0.99);
+INSERT INTO TRACK VALUES (261,'Enquanto O Mundo Explode',24,1,7,'Chico Science',88764,2968650,0.99);
+INSERT INTO TRACK VALUES (262,'Interlude Zumbi',24,1,7,'Chico Science',71627,2408550,0.99);
+INSERT INTO TRACK VALUES (263,'Criança De Domingo',24,1,7,'Chico Science',208222,6984813,0.99);
+INSERT INTO TRACK VALUES (264,'Amor De Muito',24,1,7,'Chico Science',175333,5881293,0.99);
+INSERT INTO TRACK VALUES (265,'Samidarish [Instrumental]',24,1,7,'Chico Science',272431,8911641,0.99);
+INSERT INTO TRACK VALUES (266,'Maracatu Atômico [Atomic Version]',24,1,7,'Chico Science',273084,9019677,0.99);
+INSERT INTO TRACK VALUES (267,'Maracatu Atômico [Ragga Mix]',24,1,7,'Chico Science',210155,6986421,0.99);
+INSERT INTO TRACK VALUES (268,'Maracatu Atômico [Trip Hop]',24,1,7,'Chico Science',221492,7380787,0.99);
+INSERT INTO TRACK VALUES (269,'Banditismo Por Uma Questa',25,1,7,NULL,307095,10251097,0.99);
+INSERT INTO TRACK VALUES (270,'Banditismo Por Uma Questa',25,1,7,NULL,243644,8147224,0.99);
+INSERT INTO TRACK VALUES (271,'Rios Pontes & Overdrives',25,1,7,NULL,286720,9659152,0.99);
+INSERT INTO TRACK VALUES (272,'Cidade',25,1,7,NULL,216346,7241817,0.99);
+INSERT INTO TRACK VALUES (273,'Praiera',25,1,7,NULL,183640,6172781,0.99);
+INSERT INTO TRACK VALUES (274,'Samba Makossa',25,1,7,NULL,271856,9095410,0.99);
+INSERT INTO TRACK VALUES (275,'Da Lama Ao Caos',25,1,7,NULL,251559,8378065,0.99);
+INSERT INTO TRACK VALUES (276,'Maracatu De Tiro Certeiro',25,1,7,NULL,88868,2901397,0.99);
+INSERT INTO TRACK VALUES (277,'Salustiano Song',25,1,7,NULL,215405,7183969,0.99);
+INSERT INTO TRACK VALUES (278,'Antene Se',25,1,7,NULL,248372,8253618,0.99);
+INSERT INTO TRACK VALUES (279,'Risoflora',25,1,7,NULL,105586,3536938,0.99);
+INSERT INTO TRACK VALUES (280,'Lixo Do Mangue',25,1,7,NULL,193253,6534200,0.99);
+INSERT INTO TRACK VALUES (281,'Computadores Fazem Arte',25,1,7,NULL,404323,13702771,0.99);
+INSERT INTO TRACK VALUES (282,'Girassol',26,1,8,'Bino Farias/Da Gama/Lazão/Pedro Luis/Toni Garrido',249808,8327676,0.99);
+INSERT INTO TRACK VALUES (283,'A Sombra Da Maldade',26,1,8,'Da Gama/Toni Garrido',230922,7697230,0.99);
+INSERT INTO TRACK VALUES (284,'Johnny B. Goode',26,1,8,'Chuck Berry',254615,8505985,0.99);
+INSERT INTO TRACK VALUES (285,'Soldado Da Paz',26,1,8,'Herbert Vianna',194220,6455080,0.99);
+INSERT INTO TRACK VALUES (286,'Firmamento',26,1,8,'Bino Farias/Da Gama/Henry Lawes/Lazão/Toni Garrido/Winston Foser-Vers',222145,7402658,0.99);
+INSERT INTO TRACK VALUES (287,'Extra',26,1,8,'Gilberto Gil',304352,10078050,0.99);
+INSERT INTO TRACK VALUES (288,'O Erê',26,1,8,'Bernardo Vilhena/Bino Farias/Da Gama/Lazão/Toni Garrido',236382,7866924,0.99);
+INSERT INTO TRACK VALUES (289,'Podes Crer',26,1,8,'Bino Farias/Da Gama/Lazão/Toni Garrido',232280,7747747,0.99);
+INSERT INTO TRACK VALUES (290,'A Estrada',26,1,8,'Bino Farias/Da Gama/Lazão/Toni Garrido',248842,8275673,0.99);
+INSERT INTO TRACK VALUES (291,'Berlim',26,1,8,'Da Gama/Toni Garrido',207542,6920424,0.99);
+INSERT INTO TRACK VALUES (292,'Já Foi',26,1,8,'Bino Farias/Da Gama/Lazão/Toni Garrido',221544,7388466,0.99);
+INSERT INTO TRACK VALUES (293,'Onde Você Mora?',26,1,8,'Marisa Monte/Nando Reis',256026,8502588,0.99);
+INSERT INTO TRACK VALUES (294,'Pensamento',26,1,8,'Bino Farias/Da Gamma/Lazão/Rás Bernard',173008,5748424,0.99);
+INSERT INTO TRACK VALUES (295,'Conciliação',26,1,8,'Da Gama/Lazão/Rás Bernardo',257619,8552474,0.99);
+INSERT INTO TRACK VALUES (296,'Realidade Virtual',26,1,8,'Bino Farias/Da Gama/Lazão/Toni Garrido',195239,6503533,0.99);
+INSERT INTO TRACK VALUES (297,'Mensagem',26,1,8,'Bino Farias/Da Gama/Lazão/Rás Bernardo',225332,7488852,0.99);
+INSERT INTO TRACK VALUES (298,'A Cor Do Sol',26,1,8,'Bernardo Vilhena/Da Gama/Lazão',231392,7663348,0.99);
+INSERT INTO TRACK VALUES (299,'Onde Você Mora?',27,1,8,'Marisa Monte/Nando Reis',298396,10056970,0.99);
+INSERT INTO TRACK VALUES (300,'O Erê',27,1,8,'Bernardo Vilhena/Bino/Da Gama/Lazao/Toni Garrido',206942,6950332,0.99);
+INSERT INTO TRACK VALUES (301,'A Sombra Da Maldade',27,1,8,'Da Gama/Toni Garrido',285231,9544383,0.99);
+INSERT INTO TRACK VALUES (302,'A Estrada',27,1,8,'Da Gama/Lazao/Toni Garrido',282174,9344477,0.99);
+INSERT INTO TRACK VALUES (303,'Falar A Verdade',27,1,8,'Bino/Da Gama/Ras Bernardo',244950,8189093,0.99);
+INSERT INTO TRACK VALUES (304,'Firmamento',27,1,8,'Harry Lawes/Winston Foster-Vers',225488,7507866,0.99);
+INSERT INTO TRACK VALUES (305,'Pensamento',27,1,8,'Bino/Da Gama/Ras Bernardo',192391,6399761,0.99);
+INSERT INTO TRACK VALUES (306,'Realidade Virtual',27,1,8,'Bino/Da Gamma/Lazao/Toni Garrido',240300,8069934,0.99);
+INSERT INTO TRACK VALUES (307,'Doutor',27,1,8,'Bino/Da Gama/Toni Garrido',178155,5950952,0.99);
+INSERT INTO TRACK VALUES (308,'Na Frente Da TV',27,1,8,'Bino/Da Gama/Lazao/Ras Bernardo',289750,9633659,0.99);
+INSERT INTO TRACK VALUES (309,'Downtown',27,1,8,'Cidade Negra',239725,8024386,0.99);
+INSERT INTO TRACK VALUES (310,'Sábado A Noite',27,1,8,'Lulu Santos',267363,8895073,0.99);
+INSERT INTO TRACK VALUES (311,'A Cor Do Sol',27,1,8,'Bernardo Vilhena/Da Gama/Lazao',273031,9142937,0.99);
+INSERT INTO TRACK VALUES (312,'Eu Também Quero Beijar',27,1,8,'Fausto Nilo/Moraes Moreira/Pepeu Gomes',211147,7029400,0.99);
+INSERT INTO TRACK VALUES (313,'Noite Do Prazer',28,1,7,NULL,311353,10309980,0.99);
+INSERT INTO TRACK VALUES (314,'À Francesa',28,1,7,NULL,244532,8150846,0.99);
+INSERT INTO TRACK VALUES (315,'Cada Um Cada Um (A Namoradeira)',28,1,7,NULL,253492,8441034,0.99);
+INSERT INTO TRACK VALUES (316,'Linha Do Equador',28,1,7,NULL,244715,8123466,0.99);
+INSERT INTO TRACK VALUES (317,'Amor Demais',28,1,7,NULL,254040,8420093,0.99);
+INSERT INTO TRACK VALUES (318,'Férias',28,1,7,NULL,264202,8731945,0.99);
+INSERT INTO TRACK VALUES (319,'Gostava Tanto De Você',28,1,7,NULL,230452,7685326,0.99);
+INSERT INTO TRACK VALUES (320,'Flor Do Futuro',28,1,7,NULL,275748,9205941,0.99);
+INSERT INTO TRACK VALUES (321,'Felicidade Urgente',28,1,7,NULL,266605,8873358,0.99);
+INSERT INTO TRACK VALUES (322,'Livre Pra Viver',28,1,7,NULL,214595,7111596,0.99);
+INSERT INTO TRACK VALUES (323,'Dig-Dig, Lambe-Lambe (Ao Vivo)',29,1,9,'Cassiano Costa/Cintia Maviane/J.F./Lucas Costa',205479,6892516,0.99);
+INSERT INTO TRACK VALUES (324,'Pererê',29,1,9,'Augusto Conceição/Chiclete Com Banana',198661,6643207,0.99);
+INSERT INTO TRACK VALUES (325,'TriboTchan',29,1,9,'Cal Adan/Paulo Levi',194194,6507950,0.99);
+INSERT INTO TRACK VALUES (326,'Tapa Aqui, Descobre Ali',29,1,9,'Paulo Levi/W. Rangel',188630,6327391,0.99);
+INSERT INTO TRACK VALUES (327,'Daniela',29,1,9,'Jorge Cardoso/Pierre Onasis',230791,7748006,0.99);
+INSERT INTO TRACK VALUES (328,'Bate Lata',29,1,9,'Fábio Nolasco/Gal Sales/Ivan Brasil',206733,7034985,0.99);
+INSERT INTO TRACK VALUES (329,'Garotas do Brasil',29,1,9,'Garay, Ricardo Engels/Luca Predabom/Ludwig, Carlos Henrique/Maurício Vieira',210155,6973625,0.99);
+INSERT INTO TRACK VALUES (330,'Levada do Amor (Ailoviu)',29,1,9,'Luiz Wanderley/Paulo Levi',190093,6457752,0.99);
+INSERT INTO TRACK VALUES (331,'Lavadeira',29,1,9,'Do Vale, Valverde/Gal Oliveira/Luciano Pinto',214256,7254147,0.99);
+INSERT INTO TRACK VALUES (332,'Reboladeira',29,1,9,'Cal Adan/Ferrugem/Julinho Carioca/Tríona Ní Dhomhnaill',210599,7027525,0.99);
+INSERT INTO TRACK VALUES (333,'É que Nessa Encarnação Eu Nasci Manga',29,1,9,'Lucina/Luli',196519,6568081,0.99);
+INSERT INTO TRACK VALUES (334,'Reggae Tchan',29,1,9,'Cal Adan/Del Rey, Tension/Edu Casanova',206654,6931328,0.99);
+INSERT INTO TRACK VALUES (335,'My Love',29,1,9,'Jauperi/Zeu Góes',203493,6772813,0.99);
+INSERT INTO TRACK VALUES (336,'Latinha de Cerveja',29,1,9,'Adriano Bernandes/Edmar Neves',166687,5532564,0.99);
+INSERT INTO TRACK VALUES (337,'You Shook Me',30,1,1,'J B Lenoir/Willie Dixon',315951,10249958,0.99);
+INSERT INTO TRACK VALUES (338,'I Can''t Quit You Baby',30,1,1,'Willie Dixon',263836,8581414,0.99);
+INSERT INTO TRACK VALUES (339,'Communication Breakdown',30,1,1,'Jimmy Page/John Bonham/John Paul Jones',192653,6287257,0.99);
+INSERT INTO TRACK VALUES (340,'Dazed and Confused',30,1,1,'Jimmy Page',401920,13035765,0.99);
+INSERT INTO TRACK VALUES (341,'The Girl I Love She Got Long Black Wavy Hair',30,1,1,'Jimmy Page/John Bonham/John Estes/John Paul Jones/Robert Plant',183327,5995686,0.99);
+INSERT INTO TRACK VALUES (342,'What is and Should Never Be',30,1,1,'Jimmy Page/Robert Plant',260675,8497116,0.99);
+INSERT INTO TRACK VALUES (343,'Communication Breakdown(2)',30,1,1,'Jimmy Page/John Bonham/John Paul Jones',161149,5261022,0.99);
+INSERT INTO TRACK VALUES (344,'Travelling Riverside Blues',30,1,1,'Jimmy Page/Robert Johnson/Robert Plant',312032,10232581,0.99);
+INSERT INTO TRACK VALUES (345,'Whole Lotta Love',30,1,1,'Jimmy Page/John Bonham/John Paul Jones/Robert Plant/Willie Dixon',373394,12258175,0.99);
+INSERT INTO TRACK VALUES (346,'Somethin'' Else',30,1,1,'Bob Cochran/Sharon Sheeley',127869,4165650,0.99);
+INSERT INTO TRACK VALUES (347,'Communication Breakdown(3)',30,1,1,'Jimmy Page/John Bonham/John Paul Jones',185260,6041133,0.99);
+INSERT INTO TRACK VALUES (348,'I Can''t Quit You Baby(2)',30,1,1,'Willie Dixon',380551,12377615,0.99);
+INSERT INTO TRACK VALUES (349,'You Shook Me(2)',30,1,1,'J B Lenoir/Willie Dixon',619467,20138673,0.99);
+INSERT INTO TRACK VALUES (350,'How Many More Times',30,1,1,'Chester Burnett/Jimmy Page/John Bonham/John Paul Jones/Robert Plant',711836,23092953,0.99);
+INSERT INTO TRACK VALUES (351,'Debra Kadabra',31,1,1,'Frank Zappa',234553,7649679,0.99);
+INSERT INTO TRACK VALUES (352,'Carolina Hard-Core Ecstasy',31,1,1,'Frank Zappa',359680,11731061,0.99);
+INSERT INTO TRACK VALUES (353,'Sam With The Showing Scalp Flat Top',31,1,1,'Don Van Vliet',171284,5572993,0.99);
+INSERT INTO TRACK VALUES (354,'Poofter''s Froth Wyoming Plans Ahead',31,1,1,'Frank Zappa',183902,6007019,0.99);
+INSERT INTO TRACK VALUES (355,'200 Years Old',31,1,1,'Frank Zappa',272561,8912465,0.99);
+INSERT INTO TRACK VALUES (356,'Cucamonga',31,1,1,'Frank Zappa',144483,4728586,0.99);
+INSERT INTO TRACK VALUES (357,'Advance Romance',31,1,1,'Frank Zappa',677694,22080051,0.99);
+INSERT INTO TRACK VALUES (358,'Man With The Woman Head',31,1,1,'Don Van Vliet',88894,2922044,0.99);
+INSERT INTO TRACK VALUES (359,'Muffin Man',31,1,1,'Frank Zappa',332878,10891682,0.99);
+INSERT INTO TRACK VALUES (360,'Vai-Vai 2001',32,1,10,NULL,276349,9402241,0.99);
+INSERT INTO TRACK VALUES (361,'X-9 2001',32,1,10,NULL,273920,9310370,0.99);
+INSERT INTO TRACK VALUES (362,'Gavioes 2001',32,1,10,NULL,282723,9616640,0.99);
+INSERT INTO TRACK VALUES (363,'Nene 2001',32,1,10,NULL,284969,9694508,0.99);
+INSERT INTO TRACK VALUES (364,'Rosas De Ouro 2001',32,1,10,NULL,284342,9721084,0.99);
+INSERT INTO TRACK VALUES (365,'Mocidade Alegre 2001',32,1,10,NULL,282488,9599937,0.99);
+INSERT INTO TRACK VALUES (366,'Camisa Verde 2001',32,1,10,NULL,283454,9633755,0.99);
+INSERT INTO TRACK VALUES (367,'Leandro De Itaquera 2001',32,1,10,NULL,274808,9451845,0.99);
+INSERT INTO TRACK VALUES (368,'Tucuruvi 2001',32,1,10,NULL,287921,9883335,0.99);
+INSERT INTO TRACK VALUES (369,'Aguia De Ouro 2001',32,1,10,NULL,284160,9698729,0.99);
+INSERT INTO TRACK VALUES (370,'Ipiranga 2001',32,1,10,NULL,248293,8522591,0.99);
+INSERT INTO TRACK VALUES (371,'Morro Da Casa Verde 2001',32,1,10,NULL,284708,9718778,0.99);
+INSERT INTO TRACK VALUES (372,'Perola Negra 2001',32,1,10,NULL,281626,9619196,0.99);
+INSERT INTO TRACK VALUES (373,'Sao Lucas 2001',32,1,10,NULL,296254,10020122,0.99);
+INSERT INTO TRACK VALUES (374,'Guanabara',33,1,7,'Marcos Valle',247614,8499591,0.99);
+INSERT INTO TRACK VALUES (375,'Mas Que Nada',33,1,7,'Jorge Ben',248398,8255254,0.99);
+INSERT INTO TRACK VALUES (376,'Vôo Sobre o Horizonte',33,1,7,'J.r.Bertami/Parana',225097,7528825,0.99);
+INSERT INTO TRACK VALUES (377,'A Paz',33,1,7,'Donato/Gilberto Gil',263183,8619173,0.99);
+INSERT INTO TRACK VALUES (378,'Wave (Vou te Contar)',33,1,7,'Antonio Carlos Jobim',271647,9057557,0.99);
+INSERT INTO TRACK VALUES (379,'Água de Beber',33,1,7,'Antonio Carlos Jobim/Vinicius de Moraes',146677,4866476,0.99);
+INSERT INTO TRACK VALUES (380,'Samba da Bençaco',33,1,7,'Baden Powell/Vinicius de Moraes',282200,9440676,0.99);
+INSERT INTO TRACK VALUES (381,'Pode Parar',33,1,7,'Jorge Vercilo/Jota Maranhao',179408,6046678,0.99);
+INSERT INTO TRACK VALUES (382,'Menino do Rio',33,1,7,'Caetano Veloso',262713,8737489,0.99);
+INSERT INTO TRACK VALUES (383,'Ando Meio Desligado',33,1,7,'Caetano Veloso',195813,6547648,0.99);
+INSERT INTO TRACK VALUES (384,'Mistério da Raça',33,1,7,'Luiz Melodia/Ricardo Augusto',184320,6191752,0.99);
+INSERT INTO TRACK VALUES (385,'All Star',33,1,7,'Nando Reis',176326,5891697,0.99);
+INSERT INTO TRACK VALUES (386,'Menina Bonita',33,1,7,'Alexandre Brazil/Pedro Luis/Rodrigo Cabelo',237087,7938246,0.99);
+INSERT INTO TRACK VALUES (387,'Pescador de Ilusões',33,1,7,'Macelo Yuka/O Rappa',245524,8267067,0.99);
+INSERT INTO TRACK VALUES (388,'À Vontade (Live Mix)',33,1,7,'Bombom/Ed Motta',180636,5972430,0.99);
+INSERT INTO TRACK VALUES (389,'Maria Fumaça',33,1,7,'Luiz Carlos/Oberdan',141008,4743149,0.99);
+INSERT INTO TRACK VALUES (390,'Sambassim (dj patife remix)',33,1,7,'Alba Carvalho/Fernando Porto',213655,7243166,0.99);
+INSERT INTO TRACK VALUES (391,'Garota De Ipanema',34,1,7,'Vários',279536,9141343,0.99);
+INSERT INTO TRACK VALUES (392,'Tim Tim Por Tim Tim',34,1,7,'Vários',213237,7143328,0.99);
+INSERT INTO TRACK VALUES (393,'Tarde Em Itapoã',34,1,7,'Vários',313704,10344491,0.99);
+INSERT INTO TRACK VALUES (394,'Tanto Tempo',34,1,7,'Vários',170292,5572240,0.99);
+INSERT INTO TRACK VALUES (395,'Eu Vim Da Bahia - Live',34,1,7,'Vários',157988,5115428,0.99);
+INSERT INTO TRACK VALUES (396,'Alô Alô Marciano',34,1,7,'Vários',238106,8013065,0.99);
+INSERT INTO TRACK VALUES (397,'Linha Do Horizonte',34,1,7,'Vários',279484,9275929,0.99);
+INSERT INTO TRACK VALUES (398,'Only A Dream In Rio',34,1,7,'Vários',371356,12192989,0.99);
+INSERT INTO TRACK VALUES (399,'Abrir A Porta',34,1,7,'Vários',271960,8991141,0.99);
+INSERT INTO TRACK VALUES (400,'Alice',34,1,7,'Vários',165982,5594341,0.99);
+INSERT INTO TRACK VALUES (401,'Momentos Que Marcam',34,1,7,'Vários',280137,9313740,0.99);
+INSERT INTO TRACK VALUES (402,'Um Jantar Pra Dois',34,1,7,'Vários',237714,7819755,0.99);
+INSERT INTO TRACK VALUES (403,'Bumbo Da Mangueira',34,1,7,'Vários',270158,9073350,0.99);
+INSERT INTO TRACK VALUES (404,'Mr Funk Samba',34,1,7,'Vários',213890,7102545,0.99);
+INSERT INTO TRACK VALUES (405,'Santo Antonio',34,1,7,'Vários',162716,5492069,0.99);
+INSERT INTO TRACK VALUES (406,'Por Você',34,1,7,'Vários',205557,6792493,0.99);
+INSERT INTO TRACK VALUES (407,'Só Tinha De Ser Com Você',34,1,7,'Vários',389642,13085596,0.99);
+INSERT INTO TRACK VALUES (408,'Free Speech For The Dumb',35,1,3,'Molaney/Morris/Roberts/Wainwright',155428,5076048,0.99);
+INSERT INTO TRACK VALUES (409,'It''s Electric',35,1,3,'Harris/Tatler',213995,6978601,0.99);
+INSERT INTO TRACK VALUES (410,'Sabbra Cadabra',35,1,3,'Black Sabbath',380342,12418147,0.99);
+INSERT INTO TRACK VALUES (411,'Turn The Page',35,1,3,'Seger',366524,11946327,0.99);
+INSERT INTO TRACK VALUES (412,'Die Die My Darling',35,1,3,'Danzig',149315,4867667,0.99);
+INSERT INTO TRACK VALUES (413,'Loverman',35,1,3,'Cave',472764,15446975,0.99);
+INSERT INTO TRACK VALUES (414,'Mercyful Fate',35,1,3,'Diamond/Shermann',671712,21942829,0.99);
+INSERT INTO TRACK VALUES (415,'Astronomy',35,1,3,'A.Bouchard/J.Bouchard/S.Pearlman',397531,13065612,0.99);
+INSERT INTO TRACK VALUES (416,'Whiskey In The Jar',35,1,3,'Traditional',305005,9943129,0.99);
+INSERT INTO TRACK VALUES (417,'Tuesday''s Gone',35,1,3,'Collins/Van Zandt',545750,17900787,0.99);
+INSERT INTO TRACK VALUES (418,'The More I See',35,1,3,'Molaney/Morris/Roberts/Wainwright',287973,9378873,0.99);
+INSERT INTO TRACK VALUES (419,'A Kind Of Magic',36,1,1,'Roger Taylor',262608,8689618,0.99);
+INSERT INTO TRACK VALUES (420,'Under Pressure',36,1,1,'Queen & David Bowie',236617,7739042,0.99);
+INSERT INTO TRACK VALUES (421,'Radio GA GA',36,1,1,'Roger Taylor',343745,11358573,0.99);
+INSERT INTO TRACK VALUES (422,'I Want It All',36,1,1,'Queen',241684,7876564,0.99);
+INSERT INTO TRACK VALUES (423,'I Want To Break Free',36,1,1,'John Deacon',259108,8552861,0.99);
+INSERT INTO TRACK VALUES (424,'Innuendo',36,1,1,'Queen',387761,12664591,0.99);
+INSERT INTO TRACK VALUES (425,'It''s A Hard Life',36,1,1,'Freddie Mercury',249417,8112242,0.99);
+INSERT INTO TRACK VALUES (426,'Breakthru',36,1,1,'Queen',249234,8150479,0.99);
+INSERT INTO TRACK VALUES (427,'Who Wants To Live Forever',36,1,1,'Brian May',297691,9577577,0.99);
+INSERT INTO TRACK VALUES (428,'Headlong',36,1,1,'Queen',273057,8921404,0.99);
+INSERT INTO TRACK VALUES (429,'The Miracle',36,1,1,'Queen',294974,9671923,0.99);
+INSERT INTO TRACK VALUES (430,'I''m Going Slightly Mad',36,1,1,'Queen',248032,8192339,0.99);
+INSERT INTO TRACK VALUES (431,'The Invisible Man',36,1,1,'Queen',238994,7920353,0.99);
+INSERT INTO TRACK VALUES (432,'Hammer To Fall',36,1,1,'Brian May',220316,7255404,0.99);
+INSERT INTO TRACK VALUES (433,'Friends Will Be Friends',36,1,1,'Freddie Mercury & John Deacon',248920,8114582,0.99);
+INSERT INTO TRACK VALUES (434,'The Show Must Go On',36,1,1,'Queen',263784,8526760,0.99);
+INSERT INTO TRACK VALUES (435,'One Vision',36,1,1,'Queen',242599,7936928,0.99);
+INSERT INTO TRACK VALUES (436,'Detroit Rock City',37,1,1,'Paul Stanley, B. Ezrin',218880,7146372,0.99);
+INSERT INTO TRACK VALUES (437,'Black Diamond',37,1,1,'Paul Stanley',314148,10266007,0.99);
+INSERT INTO TRACK VALUES (438,'Hard Luck Woman',37,1,1,'Paul Stanley',216032,7109267,0.99);
+INSERT INTO TRACK VALUES (439,'Sure Know Something',37,1,1,'Paul Stanley, Vincent Poncia',242468,7939886,0.99);
+INSERT INTO TRACK VALUES (440,'Love Gun',37,1,1,'Paul Stanley',196257,6424915,0.99);
+INSERT INTO TRACK VALUES (441,'Deuce',37,1,1,'Gene Simmons',185077,6097210,0.99);
+INSERT INTO TRACK VALUES (442,'Goin'' Blind',37,1,1,'Gene Simmons, S. Coronel',216215,7045314,0.99);
+INSERT INTO TRACK VALUES (443,'Shock Me',37,1,1,'Ace Frehley',227291,7529336,0.99);
+INSERT INTO TRACK VALUES (444,'Do You Love Me',37,1,1,'Paul Stanley, B. Ezrin, K. Fowley',214987,6976194,0.99);
+INSERT INTO TRACK VALUES (445,'She',37,1,1,'Gene Simmons, S. Coronel',248346,8229734,0.99);
+INSERT INTO TRACK VALUES (446,'I Was Made For Loving You',37,1,1,'Paul Stanley, Vincent Poncia, Desmond Child',271360,9018078,0.99);
+INSERT INTO TRACK VALUES (447,'Shout It Out Loud',37,1,1,'Paul Stanley, Gene Simmons, B. Ezrin',219742,7194424,0.99);
+INSERT INTO TRACK VALUES (448,'God Of Thunder',37,1,1,'Paul Stanley',255791,8309077,0.99);
+INSERT INTO TRACK VALUES (449,'Calling Dr. Love',37,1,1,'Gene Simmons',225332,7395034,0.99);
+INSERT INTO TRACK VALUES (450,'Beth',37,1,1,'S. Penridge, Bob Ezrin, Peter Criss',166974,5360574,0.99);
+INSERT INTO TRACK VALUES (451,'Strutter',37,1,1,'Paul Stanley, Gene Simmons',192496,6317021,0.99);
+INSERT INTO TRACK VALUES (452,'Rock And Roll All Nite',37,1,1,'Paul Stanley, Gene Simmons',173609,5735902,0.99);
+INSERT INTO TRACK VALUES (453,'Cold Gin',37,1,1,'Ace Frehley',262243,8609783,0.99);
+INSERT INTO TRACK VALUES (454,'Plaster Caster',37,1,1,'Gene Simmons',207333,6801116,0.99);
+INSERT INTO TRACK VALUES (455,'God Gave Rock ''n'' Roll To You',37,1,1,'Paul Stanley, Gene Simmons, Rus Ballard, Bob Ezrin',320444,10441590,0.99);
+INSERT INTO TRACK VALUES (456,'Heart of the Night',38,1,2,NULL,273737,9098263,0.99);
+INSERT INTO TRACK VALUES (457,'De La Luz',38,1,2,NULL,315219,10518284,0.99);
+INSERT INTO TRACK VALUES (458,'Westwood Moon',38,1,2,NULL,295627,9765802,0.99);
+INSERT INTO TRACK VALUES (459,'Midnight',38,1,2,NULL,266866,8851060,0.99);
+INSERT INTO TRACK VALUES (460,'Playtime',38,1,2,NULL,273580,9070880,0.99);
+INSERT INTO TRACK VALUES (461,'Surrender',38,1,2,NULL,287634,9422926,0.99);
+INSERT INTO TRACK VALUES (462,'Valentino''s',38,1,2,NULL,296124,9848545,0.99);
+INSERT INTO TRACK VALUES (463,'Believe',38,1,2,NULL,310778,10317185,0.99);
+INSERT INTO TRACK VALUES (464,'As We Sleep',38,1,2,NULL,316865,10429398,0.99);
+INSERT INTO TRACK VALUES (465,'When Evening Falls',38,1,2,NULL,298135,9863942,0.99);
+INSERT INTO TRACK VALUES (466,'J Squared',38,1,2,NULL,288757,9480777,0.99);
+INSERT INTO TRACK VALUES (467,'Best Thing',38,1,2,NULL,274259,9069394,0.99);
+INSERT INTO TRACK VALUES (468,'Maria',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',167262,5484747,0.99);
+INSERT INTO TRACK VALUES (469,'Poprocks And Coke',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',158354,5243078,0.99);
+INSERT INTO TRACK VALUES (470,'Longview',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',234083,7714939,0.99);
+INSERT INTO TRACK VALUES (471,'Welcome To Paradise',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',224208,7406008,0.99);
+INSERT INTO TRACK VALUES (472,'Basket Case',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',181629,5951736,0.99);
+INSERT INTO TRACK VALUES (473,'When I Come Around',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',178364,5839426,0.99);
+INSERT INTO TRACK VALUES (474,'She',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',134164,4425128,0.99);
+INSERT INTO TRACK VALUES (475,'J.A.R. (Jason Andrew Relva)',39,1,4,'Mike Dirnt -Words Green Day -Music',170997,5645755,0.99);
+INSERT INTO TRACK VALUES (476,'Geek Stink Breath',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',135888,4408983,0.99);
+INSERT INTO TRACK VALUES (477,'Brain Stew',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',193149,6305550,0.99);
+INSERT INTO TRACK VALUES (478,'Jaded',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',90331,2950224,0.99);
+INSERT INTO TRACK VALUES (479,'Walking Contradiction',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',151170,4932366,0.99);
+INSERT INTO TRACK VALUES (480,'Stuck With Me',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',135523,4431357,0.99);
+INSERT INTO TRACK VALUES (481,'Hitchin'' A Ride',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',171546,5616891,0.99);
+INSERT INTO TRACK VALUES (482,'Good Riddance (Time Of Your Life)',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',153600,5075241,0.99);
+INSERT INTO TRACK VALUES (483,'Redundant',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',198164,6481753,0.99);
+INSERT INTO TRACK VALUES (484,'Nice Guys Finish Last',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',170187,5604618,0.99);
+INSERT INTO TRACK VALUES (485,'Minority',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',168803,5535061,0.99);
+INSERT INTO TRACK VALUES (486,'Warning',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',221910,7343176,0.99);
+INSERT INTO TRACK VALUES (487,'Waiting',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',192757,6316430,0.99);
+INSERT INTO TRACK VALUES (488,'Macy''s Day Parade',39,1,4,'Billie Joe Armstrong -Words Green Day -Music',213420,7075573,0.99);
+INSERT INTO TRACK VALUES (489,'Into The Light',40,1,1,'David Coverdale',76303,2452653,0.99);
+INSERT INTO TRACK VALUES (490,'River Song',40,1,1,'David Coverdale',439510,14359478,0.99);
+INSERT INTO TRACK VALUES (491,'She Give Me ...',40,1,1,'David Coverdale',252551,8385478,0.99);
+INSERT INTO TRACK VALUES (492,'Don''t You Cry',40,1,1,'David Coverdale',347036,11269612,0.99);
+INSERT INTO TRACK VALUES (493,'Love Is Blind',40,1,1,'David Coverdale/Earl Slick',344999,11409720,0.99);
+INSERT INTO TRACK VALUES (494,'Slave',40,1,1,'David Coverdale/Earl Slick',291892,9425200,0.99);
+INSERT INTO TRACK VALUES (495,'Cry For Love',40,1,1,'Bossi/David Coverdale/Earl Slick',293015,9567075,0.99);
+INSERT INTO TRACK VALUES (496,'Living On Love',40,1,1,'Bossi/David Coverdale/Earl Slick',391549,12785876,0.99);
+INSERT INTO TRACK VALUES (497,'Midnight Blue',40,1,1,'David Coverdale/Earl Slick',298631,9750990,0.99);
+INSERT INTO TRACK VALUES (498,'Too Many Tears',40,1,1,'Adrian Vanderberg/David Coverdale',359497,11810238,0.99);
+INSERT INTO TRACK VALUES (499,'Don''t Lie To Me',40,1,1,'David Coverdale/Earl Slick',283585,9288007,0.99);
+INSERT INTO TRACK VALUES (500,'Wherever You May Go',40,1,1,'David Coverdale',239699,7803074,0.99);
+
+
+
+INSERT INTO PLAYLIST_TRACK VALUES (1,1);
+INSERT INTO PLAYLIST_TRACK VALUES (1,2);
+INSERT INTO PLAYLIST_TRACK VALUES (1,3);
+INSERT INTO PLAYLIST_TRACK VALUES (1,4);
+INSERT INTO PLAYLIST_TRACK VALUES (1,5);
+INSERT INTO PLAYLIST_TRACK VALUES (1,6);
+INSERT INTO PLAYLIST_TRACK VALUES (1,7);
+INSERT INTO PLAYLIST_TRACK VALUES (1,8);
+INSERT INTO PLAYLIST_TRACK VALUES (1,9);
+INSERT INTO PLAYLIST_TRACK VALUES (1,10);
+INSERT INTO PLAYLIST_TRACK VALUES (1,11);
+INSERT INTO PLAYLIST_TRACK VALUES (1,12);
+INSERT INTO PLAYLIST_TRACK VALUES (1,13);
+INSERT INTO PLAYLIST_TRACK VALUES (1,14);
+INSERT INTO PLAYLIST_TRACK VALUES (1,15);
+INSERT INTO PLAYLIST_TRACK VALUES (1,16);
+INSERT INTO PLAYLIST_TRACK VALUES (1,17);
+INSERT INTO PLAYLIST_TRACK VALUES (1,18);
+INSERT INTO PLAYLIST_TRACK VALUES (1,19);
+INSERT INTO PLAYLIST_TRACK VALUES (1,20);
+INSERT INTO PLAYLIST_TRACK VALUES (1,21);
+INSERT INTO PLAYLIST_TRACK VALUES (1,22);
+INSERT INTO PLAYLIST_TRACK VALUES (1,23);
+INSERT INTO PLAYLIST_TRACK VALUES (1,24);
+INSERT INTO PLAYLIST_TRACK VALUES (1,25);
+INSERT INTO PLAYLIST_TRACK VALUES (1,26);
+INSERT INTO PLAYLIST_TRACK VALUES (1,27);
+INSERT INTO PLAYLIST_TRACK VALUES (1,28);
+INSERT INTO PLAYLIST_TRACK VALUES (1,29);
+INSERT INTO PLAYLIST_TRACK VALUES (1,30);
+INSERT INTO PLAYLIST_TRACK VALUES (1,31);
+INSERT INTO PLAYLIST_TRACK VALUES (1,32);
+INSERT INTO PLAYLIST_TRACK VALUES (1,33);
+INSERT INTO PLAYLIST_TRACK VALUES (1,34);
+INSERT INTO PLAYLIST_TRACK VALUES (1,35);
+INSERT INTO PLAYLIST_TRACK VALUES (1,36);
+INSERT INTO PLAYLIST_TRACK VALUES (1,37);
+INSERT INTO PLAYLIST_TRACK VALUES (1,38);
+INSERT INTO PLAYLIST_TRACK VALUES (1,39);
+INSERT INTO PLAYLIST_TRACK VALUES (1,40);
+INSERT INTO PLAYLIST_TRACK VALUES (1,41);
+INSERT INTO PLAYLIST_TRACK VALUES (1,42);
+INSERT INTO PLAYLIST_TRACK VALUES (1,43);
+INSERT INTO PLAYLIST_TRACK VALUES (1,44);
+INSERT INTO PLAYLIST_TRACK VALUES (1,45);
+INSERT INTO PLAYLIST_TRACK VALUES (1,46);
+INSERT INTO PLAYLIST_TRACK VALUES (1,47);
+INSERT INTO PLAYLIST_TRACK VALUES (1,48);
+INSERT INTO PLAYLIST_TRACK VALUES (1,49);
+INSERT INTO PLAYLIST_TRACK VALUES (1,50);
+INSERT INTO PLAYLIST_TRACK VALUES (1,51);
+INSERT INTO PLAYLIST_TRACK VALUES (1,52);
+INSERT INTO PLAYLIST_TRACK VALUES (1,53);
+INSERT INTO PLAYLIST_TRACK VALUES (1,54);
+INSERT INTO PLAYLIST_TRACK VALUES (1,55);
+INSERT INTO PLAYLIST_TRACK VALUES (1,56);
+INSERT INTO PLAYLIST_TRACK VALUES (1,57);
+INSERT INTO PLAYLIST_TRACK VALUES (1,58);
+INSERT INTO PLAYLIST_TRACK VALUES (1,59);
+INSERT INTO PLAYLIST_TRACK VALUES (1,60);
+INSERT INTO PLAYLIST_TRACK VALUES (1,61);
+INSERT INTO PLAYLIST_TRACK VALUES (1,62);
+INSERT INTO PLAYLIST_TRACK VALUES (1,63);
+INSERT INTO PLAYLIST_TRACK VALUES (1,64);
+INSERT INTO PLAYLIST_TRACK VALUES (1,65);
+INSERT INTO PLAYLIST_TRACK VALUES (1,66);
+INSERT INTO PLAYLIST_TRACK VALUES (1,67);
+INSERT INTO PLAYLIST_TRACK VALUES (1,68);
+INSERT INTO PLAYLIST_TRACK VALUES (1,69);
+INSERT INTO PLAYLIST_TRACK VALUES (1,70);
+INSERT INTO PLAYLIST_TRACK VALUES (1,71);
+INSERT INTO PLAYLIST_TRACK VALUES (1,72);
+INSERT INTO PLAYLIST_TRACK VALUES (1,73);
+INSERT INTO PLAYLIST_TRACK VALUES (1,74);
+INSERT INTO PLAYLIST_TRACK VALUES (1,75);
+INSERT INTO PLAYLIST_TRACK VALUES (1,76);
+INSERT INTO PLAYLIST_TRACK VALUES (1,77);
+INSERT INTO PLAYLIST_TRACK VALUES (1,78);
+INSERT INTO PLAYLIST_TRACK VALUES (1,79);
+INSERT INTO PLAYLIST_TRACK VALUES (1,80);
+INSERT INTO PLAYLIST_TRACK VALUES (1,81);
+INSERT INTO PLAYLIST_TRACK VALUES (1,82);
+INSERT INTO PLAYLIST_TRACK VALUES (1,83);
+INSERT INTO PLAYLIST_TRACK VALUES (1,84);
+INSERT INTO PLAYLIST_TRACK VALUES (1,85);
+INSERT INTO PLAYLIST_TRACK VALUES (1,86);
+INSERT INTO PLAYLIST_TRACK VALUES (1,87);
+INSERT INTO PLAYLIST_TRACK VALUES (1,88);
+INSERT INTO PLAYLIST_TRACK VALUES (1,89);
+INSERT INTO PLAYLIST_TRACK VALUES (1,90);
+INSERT INTO PLAYLIST_TRACK VALUES (1,91);
+INSERT INTO PLAYLIST_TRACK VALUES (1,92);
+INSERT INTO PLAYLIST_TRACK VALUES (1,93);
+INSERT INTO PLAYLIST_TRACK VALUES (1,94);
+INSERT INTO PLAYLIST_TRACK VALUES (1,95);
+INSERT INTO PLAYLIST_TRACK VALUES (1,96);
+INSERT INTO PLAYLIST_TRACK VALUES (1,97);
+INSERT INTO PLAYLIST_TRACK VALUES (1,98);
+INSERT INTO PLAYLIST_TRACK VALUES (1,99);
+INSERT INTO PLAYLIST_TRACK VALUES (1,100);
+INSERT INTO PLAYLIST_TRACK VALUES (1,101);
+INSERT INTO PLAYLIST_TRACK VALUES (1,102);
+INSERT INTO PLAYLIST_TRACK VALUES (1,103);
+INSERT INTO PLAYLIST_TRACK VALUES (1,104);
+INSERT INTO PLAYLIST_TRACK VALUES (1,105);
+INSERT INTO PLAYLIST_TRACK VALUES (1,106);
+INSERT INTO PLAYLIST_TRACK VALUES (1,107);
+INSERT INTO PLAYLIST_TRACK VALUES (1,108);
+INSERT INTO PLAYLIST_TRACK VALUES (1,109);
+INSERT INTO PLAYLIST_TRACK VALUES (1,110);
+INSERT INTO PLAYLIST_TRACK VALUES (1,111);
+INSERT INTO PLAYLIST_TRACK VALUES (1,112);
+INSERT INTO PLAYLIST_TRACK VALUES (1,113);
+INSERT INTO PLAYLIST_TRACK VALUES (1,114);
+INSERT INTO PLAYLIST_TRACK VALUES (1,115);
+INSERT INTO PLAYLIST_TRACK VALUES (1,116);
+INSERT INTO PLAYLIST_TRACK VALUES (1,117);
+INSERT INTO PLAYLIST_TRACK VALUES (1,118);
+INSERT INTO PLAYLIST_TRACK VALUES (1,119);
+INSERT INTO PLAYLIST_TRACK VALUES (1,120);
+INSERT INTO PLAYLIST_TRACK VALUES (1,121);
+INSERT INTO PLAYLIST_TRACK VALUES (1,122);
+INSERT INTO PLAYLIST_TRACK VALUES (1,123);
+INSERT INTO PLAYLIST_TRACK VALUES (1,124);
+INSERT INTO PLAYLIST_TRACK VALUES (1,125);
+INSERT INTO PLAYLIST_TRACK VALUES (1,126);
+INSERT INTO PLAYLIST_TRACK VALUES (1,127);
+INSERT INTO PLAYLIST_TRACK VALUES (1,128);
+INSERT INTO PLAYLIST_TRACK VALUES (1,129);
+INSERT INTO PLAYLIST_TRACK VALUES (1,130);
+INSERT INTO PLAYLIST_TRACK VALUES (1,131);
+INSERT INTO PLAYLIST_TRACK VALUES (1,132);
+INSERT INTO PLAYLIST_TRACK VALUES (1,133);
+INSERT INTO PLAYLIST_TRACK VALUES (1,134);
+INSERT INTO PLAYLIST_TRACK VALUES (1,135);
+INSERT INTO PLAYLIST_TRACK VALUES (1,136);
+INSERT INTO PLAYLIST_TRACK VALUES (1,137);
+INSERT INTO PLAYLIST_TRACK VALUES (1,138);
+INSERT INTO PLAYLIST_TRACK VALUES (1,139);
+INSERT INTO PLAYLIST_TRACK VALUES (1,140);
+INSERT INTO PLAYLIST_TRACK VALUES (1,141);
+INSERT INTO PLAYLIST_TRACK VALUES (1,142);
+INSERT INTO PLAYLIST_TRACK VALUES (1,143);
+INSERT INTO PLAYLIST_TRACK VALUES (1,144);
+INSERT INTO PLAYLIST_TRACK VALUES (1,145);
+INSERT INTO PLAYLIST_TRACK VALUES (1,146);
+INSERT INTO PLAYLIST_TRACK VALUES (1,147);
+INSERT INTO PLAYLIST_TRACK VALUES (1,148);
+INSERT INTO PLAYLIST_TRACK VALUES (1,149);
+INSERT INTO PLAYLIST_TRACK VALUES (1,150);
+INSERT INTO PLAYLIST_TRACK VALUES (5,3);
+INSERT INTO PLAYLIST_TRACK VALUES (5,4);
+INSERT INTO PLAYLIST_TRACK VALUES (5,5);
+INSERT INTO PLAYLIST_TRACK VALUES (5,23);
+INSERT INTO PLAYLIST_TRACK VALUES (5,24);
+INSERT INTO PLAYLIST_TRACK VALUES (5,25);
+INSERT INTO PLAYLIST_TRACK VALUES (5,26);
+INSERT INTO PLAYLIST_TRACK VALUES (5,27);
+INSERT INTO PLAYLIST_TRACK VALUES (5,28);
+INSERT INTO PLAYLIST_TRACK VALUES (5,29);
+INSERT INTO PLAYLIST_TRACK VALUES (5,30);
+INSERT INTO PLAYLIST_TRACK VALUES (5,31);
+INSERT INTO PLAYLIST_TRACK VALUES (5,32);
+INSERT INTO PLAYLIST_TRACK VALUES (5,33);
+INSERT INTO PLAYLIST_TRACK VALUES (5,34);
+INSERT INTO PLAYLIST_TRACK VALUES (5,35);
+INSERT INTO PLAYLIST_TRACK VALUES (5,36);
+INSERT INTO PLAYLIST_TRACK VALUES (5,37);
+INSERT INTO PLAYLIST_TRACK VALUES (5,38);
+INSERT INTO PLAYLIST_TRACK VALUES (5,39);
+INSERT INTO PLAYLIST_TRACK VALUES (5,40);
+INSERT INTO PLAYLIST_TRACK VALUES (5,41);
+INSERT INTO PLAYLIST_TRACK VALUES (5,42);
+INSERT INTO PLAYLIST_TRACK VALUES (5,43);
+INSERT INTO PLAYLIST_TRACK VALUES (5,44);
+INSERT INTO PLAYLIST_TRACK VALUES (5,45);
+INSERT INTO PLAYLIST_TRACK VALUES (5,46);
+INSERT INTO PLAYLIST_TRACK VALUES (5,47);
+INSERT INTO PLAYLIST_TRACK VALUES (5,48);
+INSERT INTO PLAYLIST_TRACK VALUES (5,49);
+INSERT INTO PLAYLIST_TRACK VALUES (5,50);
+INSERT INTO PLAYLIST_TRACK VALUES (5,51);
+INSERT INTO PLAYLIST_TRACK VALUES (5,52);
+INSERT INTO PLAYLIST_TRACK VALUES (5,53);
+INSERT INTO PLAYLIST_TRACK VALUES (5,54);
+INSERT INTO PLAYLIST_TRACK VALUES (5,55);
+INSERT INTO PLAYLIST_TRACK VALUES (5,56);
+INSERT INTO PLAYLIST_TRACK VALUES (5,57);
+INSERT INTO PLAYLIST_TRACK VALUES (5,58);
+INSERT INTO PLAYLIST_TRACK VALUES (5,59);
+INSERT INTO PLAYLIST_TRACK VALUES (5,60);
+INSERT INTO PLAYLIST_TRACK VALUES (5,61);
+INSERT INTO PLAYLIST_TRACK VALUES (5,62);
+INSERT INTO PLAYLIST_TRACK VALUES (5,77);
+INSERT INTO PLAYLIST_TRACK VALUES (5,78);
+INSERT INTO PLAYLIST_TRACK VALUES (5,79);
+INSERT INTO PLAYLIST_TRACK VALUES (5,80);
+INSERT INTO PLAYLIST_TRACK VALUES (5,81);
+INSERT INTO PLAYLIST_TRACK VALUES (5,82);
+INSERT INTO PLAYLIST_TRACK VALUES (5,83);
+INSERT INTO PLAYLIST_TRACK VALUES (5,84);
+INSERT INTO PLAYLIST_TRACK VALUES (5,111);
+INSERT INTO PLAYLIST_TRACK VALUES (5,112);
+INSERT INTO PLAYLIST_TRACK VALUES (5,113);
+INSERT INTO PLAYLIST_TRACK VALUES (5,114);
+INSERT INTO PLAYLIST_TRACK VALUES (5,115);
+INSERT INTO PLAYLIST_TRACK VALUES (5,116);
+INSERT INTO PLAYLIST_TRACK VALUES (5,117);
+INSERT INTO PLAYLIST_TRACK VALUES (5,118);
+INSERT INTO PLAYLIST_TRACK VALUES (5,119);
+INSERT INTO PLAYLIST_TRACK VALUES (5,120);
+INSERT INTO PLAYLIST_TRACK VALUES (5,121);
+INSERT INTO PLAYLIST_TRACK VALUES (5,122);
+INSERT INTO PLAYLIST_TRACK VALUES (5,166);
+INSERT INTO PLAYLIST_TRACK VALUES (5,167);
+INSERT INTO PLAYLIST_TRACK VALUES (5,168);
+INSERT INTO PLAYLIST_TRACK VALUES (5,169);
+INSERT INTO PLAYLIST_TRACK VALUES (5,170);
+INSERT INTO PLAYLIST_TRACK VALUES (5,171);
+INSERT INTO PLAYLIST_TRACK VALUES (5,172);
+INSERT INTO PLAYLIST_TRACK VALUES (5,173);
+INSERT INTO PLAYLIST_TRACK VALUES (8,1);
+INSERT INTO PLAYLIST_TRACK VALUES (8,2);
+INSERT INTO PLAYLIST_TRACK VALUES (8,3);
+INSERT INTO PLAYLIST_TRACK VALUES (8,4);
+INSERT INTO PLAYLIST_TRACK VALUES (8,5);
+INSERT INTO PLAYLIST_TRACK VALUES (8,6);
+INSERT INTO PLAYLIST_TRACK VALUES (8,7);
+INSERT INTO PLAYLIST_TRACK VALUES (8,8);
+INSERT INTO PLAYLIST_TRACK VALUES (8,9);
+INSERT INTO PLAYLIST_TRACK VALUES (8,10);
+INSERT INTO PLAYLIST_TRACK VALUES (8,11);
+INSERT INTO PLAYLIST_TRACK VALUES (8,12);
+INSERT INTO PLAYLIST_TRACK VALUES (8,13);
+INSERT INTO PLAYLIST_TRACK VALUES (8,14);
+INSERT INTO PLAYLIST_TRACK VALUES (8,15);
+INSERT INTO PLAYLIST_TRACK VALUES (8,16);
+INSERT INTO PLAYLIST_TRACK VALUES (8,17);
+INSERT INTO PLAYLIST_TRACK VALUES (8,18);
+INSERT INTO PLAYLIST_TRACK VALUES (8,19);
+INSERT INTO PLAYLIST_TRACK VALUES (8,20);
+INSERT INTO PLAYLIST_TRACK VALUES (8,21);
+INSERT INTO PLAYLIST_TRACK VALUES (8,22);
+INSERT INTO PLAYLIST_TRACK VALUES (8,23);
+INSERT INTO PLAYLIST_TRACK VALUES (8,24);
+INSERT INTO PLAYLIST_TRACK VALUES (8,25);
+INSERT INTO PLAYLIST_TRACK VALUES (8,26);
+INSERT INTO PLAYLIST_TRACK VALUES (8,27);
+INSERT INTO PLAYLIST_TRACK VALUES (8,28);
+INSERT INTO PLAYLIST_TRACK VALUES (8,29);
+INSERT INTO PLAYLIST_TRACK VALUES (8,30);
+INSERT INTO PLAYLIST_TRACK VALUES (8,31);
+INSERT INTO PLAYLIST_TRACK VALUES (8,32);
+INSERT INTO PLAYLIST_TRACK VALUES (8,33);
+INSERT INTO PLAYLIST_TRACK VALUES (8,34);
+INSERT INTO PLAYLIST_TRACK VALUES (8,35);
+INSERT INTO PLAYLIST_TRACK VALUES (8,36);
+INSERT INTO PLAYLIST_TRACK VALUES (8,37);
+INSERT INTO PLAYLIST_TRACK VALUES (8,38);
+INSERT INTO PLAYLIST_TRACK VALUES (8,39);
+INSERT INTO PLAYLIST_TRACK VALUES (8,40);
+INSERT INTO PLAYLIST_TRACK VALUES (8,41);
+INSERT INTO PLAYLIST_TRACK VALUES (8,42);
+INSERT INTO PLAYLIST_TRACK VALUES (8,43);
+INSERT INTO PLAYLIST_TRACK VALUES (8,44);
+INSERT INTO PLAYLIST_TRACK VALUES (8,45);
+INSERT INTO PLAYLIST_TRACK VALUES (8,46);
+INSERT INTO PLAYLIST_TRACK VALUES (8,47);
+INSERT INTO PLAYLIST_TRACK VALUES (8,48);
+INSERT INTO PLAYLIST_TRACK VALUES (8,49);
+INSERT INTO PLAYLIST_TRACK VALUES (8,50);
+INSERT INTO PLAYLIST_TRACK VALUES (8,51);
+INSERT INTO PLAYLIST_TRACK VALUES (8,52);
+INSERT INTO PLAYLIST_TRACK VALUES (8,53);
+INSERT INTO PLAYLIST_TRACK VALUES (8,54);
+INSERT INTO PLAYLIST_TRACK VALUES (8,55);
+INSERT INTO PLAYLIST_TRACK VALUES (8,56);
+INSERT INTO PLAYLIST_TRACK VALUES (8,57);
+INSERT INTO PLAYLIST_TRACK VALUES (8,58);
+INSERT INTO PLAYLIST_TRACK VALUES (8,59);
+INSERT INTO PLAYLIST_TRACK VALUES (8,60);
+INSERT INTO PLAYLIST_TRACK VALUES (8,61);
+INSERT INTO PLAYLIST_TRACK VALUES (8,62);
+INSERT INTO PLAYLIST_TRACK VALUES (8,63);
+INSERT INTO PLAYLIST_TRACK VALUES (8,64);
+INSERT INTO PLAYLIST_TRACK VALUES (8,65);
+INSERT INTO PLAYLIST_TRACK VALUES (8,66);
+INSERT INTO PLAYLIST_TRACK VALUES (8,67);
+INSERT INTO PLAYLIST_TRACK VALUES (8,68);
+INSERT INTO PLAYLIST_TRACK VALUES (8,69);
+INSERT INTO PLAYLIST_TRACK VALUES (8,70);
+INSERT INTO PLAYLIST_TRACK VALUES (8,71);
+INSERT INTO PLAYLIST_TRACK VALUES (8,72);
+INSERT INTO PLAYLIST_TRACK VALUES (8,73);
+INSERT INTO PLAYLIST_TRACK VALUES (8,74);
+INSERT INTO PLAYLIST_TRACK VALUES (8,75);
+INSERT INTO PLAYLIST_TRACK VALUES (8,76);
+INSERT INTO PLAYLIST_TRACK VALUES (8,77);
+INSERT INTO PLAYLIST_TRACK VALUES (8,78);
+INSERT INTO PLAYLIST_TRACK VALUES (8,79);
+INSERT INTO PLAYLIST_TRACK VALUES (8,80);
+INSERT INTO PLAYLIST_TRACK VALUES (8,81);
+INSERT INTO PLAYLIST_TRACK VALUES (8,82);
+INSERT INTO PLAYLIST_TRACK VALUES (8,83);
+INSERT INTO PLAYLIST_TRACK VALUES (8,84);
+INSERT INTO PLAYLIST_TRACK VALUES (8,85);
+INSERT INTO PLAYLIST_TRACK VALUES (8,86);
+INSERT INTO PLAYLIST_TRACK VALUES (8,87);
+INSERT INTO PLAYLIST_TRACK VALUES (8,88);
+INSERT INTO PLAYLIST_TRACK VALUES (8,89);
+INSERT INTO PLAYLIST_TRACK VALUES (8,90);
+INSERT INTO PLAYLIST_TRACK VALUES (8,91);
+INSERT INTO PLAYLIST_TRACK VALUES (8,92);
+INSERT INTO PLAYLIST_TRACK VALUES (8,93);
+INSERT INTO PLAYLIST_TRACK VALUES (8,94);
+INSERT INTO PLAYLIST_TRACK VALUES (8,95);
+INSERT INTO PLAYLIST_TRACK VALUES (8,96);
+INSERT INTO PLAYLIST_TRACK VALUES (8,97);
+INSERT INTO PLAYLIST_TRACK VALUES (8,98);
+INSERT INTO PLAYLIST_TRACK VALUES (8,99);
+INSERT INTO PLAYLIST_TRACK VALUES (8,100);
+INSERT INTO PLAYLIST_TRACK VALUES (17,1);
+INSERT INTO PLAYLIST_TRACK VALUES (17,2);
+INSERT INTO PLAYLIST_TRACK VALUES (17,3);
+INSERT INTO PLAYLIST_TRACK VALUES (17,4);
+INSERT INTO PLAYLIST_TRACK VALUES (17,5);
+INSERT INTO PLAYLIST_TRACK VALUES (17,152);
+INSERT INTO PLAYLIST_TRACK VALUES (17,160);
+
+
+INSERT INTO INVOICE_LINE VALUES (1,1,2,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (2,1,4,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (3,2,6,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (4,2,8,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (5,2,10,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (6,2,12,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (7,3,16,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (8,3,20,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (9,3,24,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (10,3,28,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (11,3,32,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (12,3,36,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (13,4,42,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (14,4,48,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (15,4,54,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (16,4,60,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (17,4,66,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (18,4,72,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (19,4,78,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (20,4,84,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (21,4,90,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (22,5,99,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (23,5,108,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (24,5,117,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (25,5,126,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (26,5,135,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (27,5,144,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (28,5,153,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (29,5,162,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (30,5,171,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (31,5,180,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (32,5,189,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (33,5,198,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (34,5,207,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (35,5,216,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (36,6,230,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (37,7,231,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (38,7,232,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (39,8,234,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (40,8,236,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (41,9,238,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (42,9,240,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (43,9,242,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (44,9,244,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (45,10,248,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (46,10,252,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (47,10,256,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (48,10,260,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (49,10,264,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (50,10,268,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (51,11,274,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (52,11,280,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (53,11,286,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (54,11,292,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (55,11,298,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (56,11,304,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (57,11,310,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (58,11,316,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (59,11,322,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (60,12,331,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (61,12,340,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (62,12,349,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (63,12,358,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (64,12,367,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (65,12,376,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (66,12,385,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (67,12,394,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (68,12,403,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (69,12,412,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (70,12,421,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (71,12,430,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (72,12,439,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (73,12,448,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (74,13,462,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (75,14,463,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (76,14,464,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (77,15,466,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (78,15,468,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (79,16,470,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (80,16,472,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (81,16,474,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (82,16,476,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (83,17,480,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (84,17,484,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (85,17,488,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (86,17,492,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (87,17,496,0.99,1);
+INSERT INTO INVOICE_LINE VALUES (88,17,500,0.99,1);

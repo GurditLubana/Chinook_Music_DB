@@ -1,0 +1,146 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MusicBandDBInterface</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/MusicBandDBInterface.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Catamaran:wght@100&family=Noto+Serif:ital@1&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+
+        body {
+            font-family: 'Catamaran', sans-serif;
+            font-family: 'Noto Serif', serif;
+            font-family: 'Roboto Slab', serif;
+        }
+
+        .brandName{
+            color:white !important;
+        }
+        .mynavbar {
+            overflow: hidden;
+            background-color: #333;
+            margin-right: 51rem;
+            color:white;
+        }
+
+            .mynavbar a {
+                float: left;
+                font-size: 16px;
+                color: white;
+                text-align: center;
+                padding: 14px 16px;
+                text-decoration: none;
+            }
+
+        .mydropdown {
+            float: inherit;
+            overflow: hidden;
+        }
+
+            .mydropdown .mydropbtn {
+                font-size: 16px;
+                border: none;
+                outline: none;
+                color: white;
+                padding: 14px 16px;
+                background-color: #3498DB;
+                font-family: inherit;
+                margin: 0;
+                border-radius: 10px;
+                cursor: pointer;
+                transition: background-color 0.3s ease-in-out;
+            }
+
+                .mydropdown .mydropbtn:hover {
+                    background-color: #207cca;
+                }
+
+
+            .mydropdown:hover .mydropbtn{
+                background-color: #2980B9;
+
+            }
+
+            .mynavbar a:hover{
+            background-color: #4A4A4A;
+            }
+
+        .mydropdown-content {
+            display: none;
+            position: inherit;
+            background-color: #f9f9f9;
+            width: 150px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .mydropdown-content a {
+                float: none;
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+                text-align: center;
+            }
+
+                .mydropdown-content a:hover {
+                    background-color: #ddd;
+                }
+
+        .mydropdown:hover .mydropdown-content {
+            display: block;
+        }
+    </style>
+
+
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-dark border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand brandName" asp-area="" asp-page="/Index">MusicBandDBInterface</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="mynavbar bg-dark">
+
+                    <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
+                        
+                </div>
+            </div>
+            
+        </nav>
+        
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+        
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - MusicBandDBInterface - <a asp-area="" asp-page="/Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+   
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

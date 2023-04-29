@@ -1,0 +1,36 @@
+﻿@page
+@model MusicBandDBInterface.Pages.Queries.IndexModel
+@{
+}
+
+<div class="text-left">
+    <h4>Query : Retrieve the first name, last name and email along with InvoiceDate and Total price of customers who have made a purchase of at least $1.5 in the month of January, but not in the month of February and where date of that month is prior to 15 (So if someone bought something on 16 January, then it shouldn't be included in the output. Only customers who purshased something before 15 January of that year should be included). Also order them by the ascending amount spent.  </h4>
+    <br>
+    <hr>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Email Address</th>
+            <th>Invoice Date</th>
+            <th>Total Amount spent</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var customer in Model.listCustomer)
+        {
+            <tr>
+                <td>@customer.firstName</td>
+                <td>@customer.lastName</td>
+                <td>@customer.email</td>
+                <td>@customer.invoiceDate</td>
+                <td>@customer.total</td>
+                
+            </tr>
+        }
+
+    </tbody>
+</table>

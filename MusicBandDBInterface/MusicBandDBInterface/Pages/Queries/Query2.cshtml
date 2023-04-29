@@ -1,0 +1,40 @@
+﻿@page
+@model MusicBandDBInterface.Pages.Queries.Query2Model
+@{
+}
+<div class="text-left">
+    <h4>Query : Retrieves the names of the employee, the name of the customer that the employee helped, the media type of the tracks that the customer bought, and the number of years of experience of the employee, along with total number of sales that employee did.</h4>
+    <br>
+    <hr>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Years of Experience</th>
+            <th>Customer Name</th>
+            <th>Media Type</th>
+            <th>Total Sales</th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+            @foreach (var employees in Model.listEmployees)
+        {
+            
+        <tr>
+            <td>@employees.eName</td>
+            <td>@employees.experience</td>
+            <td>@employees.cName</td>
+            <td>@employees.mediaType</td>
+            <td>@employees.totalSales</td>
+
+            
+            </tr>
+        }
+
+    </tbody>
+</table>
+</div>

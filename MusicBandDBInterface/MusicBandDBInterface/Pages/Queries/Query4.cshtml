@@ -1,0 +1,38 @@
+﻿@page
+@model MusicBandDBInterface.Pages.Queries.Query4Model
+@{
+}
+
+<div class="text-left">
+    <h4>Query : Retrieve the customers who haven't purchased anything in the last 6 months excluding the customers who never purchased anything, along with when and how much did they last purchase anything and how many months have been passed since then(in decreasing order).</h4>
+    <br>
+    <hr>
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email Address</th>
+                <th>Last Purchased Date</th>
+                <th>Months Since Last Purchase</th>
+                <th>Total Amount spent</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var customer in Model.listExpiredCustomer)
+            {
+                <tr>
+                    <td>@customer.firstName</td>
+                    <td>@customer.lastName</td>
+                    <td>@customer.email</td>
+                    <td>@customer.date</td>
+                    <td>@customer.dateDiff</td>
+                    <td>@customer.total</td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>

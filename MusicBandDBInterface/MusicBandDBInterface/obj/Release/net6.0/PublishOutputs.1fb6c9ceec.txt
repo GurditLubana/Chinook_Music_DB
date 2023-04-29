@@ -1,0 +1,13 @@
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\MusicBandDBInterface.exe
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\appsettings.Development.json
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\appsettings.json
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\MusicBandDBInterface.dll
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\MusicBandDBInterface.deps.json
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\MusicBandDBInterface.runtimeconfig.json
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\MusicBandDBInterface.pdb
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\System.Data.SqlClient.dll
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\runtimes\win-arm64\native\sni.dll
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\runtimes\win-x64\native\sni.dll
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\runtimes\win-x86\native\sni.dll
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+G:\GitHub\BandDB\MusicBandDBInterface\MusicBandDBInterface\obj\Release\net6.0\PubTmp\Out\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll

@@ -1,0 +1,49 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div>
+    <div class="text-center">
+        <h1 class="display-4">COMP 3380 Group Project</h1>
+        <br>
+
+        <div class="mydropdown">
+            <button class="mydropbtn">
+                Select a Query
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="mydropdown-content container">
+
+                <a class="nav-link text-dark" asp-area="" asp-page="/Queries/index">Query 1</a>
+                <a class="nav-link text-dark" asp-area="" asp-page="/Queries/Query2">Query 2</a>
+                <a class="nav-link text-dark" asp-area="" asp-page="/Queries/Query3">Query 3</a>
+                <a class="nav-link text-dark" asp-area="" asp-page="/Queries/Query4">Query 4</a>
+                <a class="nav-link text-dark" asp-area="" asp-page="/Queries/Query5">Query 5</a>
+
+
+
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <br>
+    <hr>
+    <h5>Query 1 : Retrieve the first name, last name and email along with InvoiceDate and Total price of customers who have made a purchase of at least $1.5 in the month of January, but not in the month of February and where date of that month is prior to 15 (So if someone bought something on 16 January, then it shouldn't be included in the output. Only customers who purshased something before 15 January of that year should be included). Also order them by the ascending amount spent.
+    </h5>
+    <br>
+    <hr>
+    <h5>Query 2: Retrieves the names of the employee, the name of the customer that the employee helped, the media type of the tracks that the customer bought, and the number of years of experience of the employee, along with total number of sales that employee did.</h5>
+    <br>
+    <hr>
+    <h5>Query 3: Find the top 10 customers (customer name should be combined First and last name in a single string) who spent the most money on music purchases, along with the total amount spent(in the decreasing order) and the most popular genre they purchased.</h5>
+    <br>
+    <hr>
+    <h5>Query 4: Retrieve the customers who haven't purchased anything in the last 6 months excluding the customers who never purchased anything, along with when and how much did they last purchase anything and how many months have been passed since then(in decreasing order).</h5>
+    <br>
+    <hr>
+    <h5>Query 5 : Retrieves the first name, last name, track name, artist name, and album name of all customers whose first names start with either "F" or "R" and who have purchased a track whose name starts with either "A" or "B". The results are ordered by track name in ascending order.</h5>
+   
+</div>
