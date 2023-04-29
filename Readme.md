@@ -61,18 +61,18 @@ Follow the following steps to install the Visual studio.
 
 - Select the ASP.NET and web development and install it as shown in the image below. For the sake of this project, we only need web development components. 
 
-![1](.\Visual_install\1.png)
+![1](1.png)
 
 ****
 
 - After selecting install you will see the following window. When the installation is finish select Lauch.
 
-![2](.\Visual_install\2.png)
+![2](2.png)
 ****
 
 
 - In the next step, you can either choose to sign up or skip sign up
-![3](.\Visual_install\3.png)
+![3](3.png)
 
 
 ### **4. Run the project**
@@ -80,19 +80,19 @@ Follow the following steps to install the Visual studio.
 1. Copy the folder named MusicBandDBInterface and save it to your system.
 2. Once Visual Studio has been installed, you will see a window like this. And we want to Select the second option "Open a project or solution". 
 
-![4](.\Visual_install\4.png)
+![4](4.png)
 
 3. Now select the path where you pasted the MusicBandDBInterface and open that folder.
 4. You will see two files there as shown in the image below. Select the file with extension .sln i.e. MusicBandDBInterface.sln file.
 
-![](.\Visual_install\5.png)
+![](5.png)
 
 5. Once the file has been open, you will see a button on the top of the screen labelled "IIS EXxpress". After clicking that option webpage will open.
 
- ![](.\Visual_install\6.png)
+ ![](6.png)
 
  ### **5. Operating the front End.**
 
  Below is the Visual demonstration of "How to operate the front-end webpage."
 
-  ![](.\Visual_install\demo.gif)
+  ![](demo.gif)
