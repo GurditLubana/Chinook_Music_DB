@@ -8,8 +8,7 @@
 ****
 ## **Introduction**
 
-This project consist of a database called PROJECT, which contains information about various tables such as employees who work in the company called Chinook, where they help customers who are purchasing audio and video track of various artists. The database also includes tables that contain information about customer's invoices, artist's albums, and media type, playlist, and genre of a track 
-
+This project is a web application that provides a user-friendly front-end interface for executing complex queries of a database called PROJECT. The database contains information about Chinook, a company that sells audio and video tracks of various artists, including employee data, customer invoices, artist albums, media types, playlists, and genres of tracks. The goal is to provide users with a powerful tool for accessing and analyzing the Chinook database.
 ****
 ## **Source:** 
 The data used in this project (Chinook Dataset) was obtained from [Source Name](https://relational.fit.cvut.cz/dataset/Financial), a publicly available database available directly from MariaDB database. Which can be access using the following credentials (MySQL Workbench):
