@@ -1,8 +1,11 @@
-# **Music Band Database**
+# Title: **Music Band Database**
 
+## Project:
+- Processed raw data and designed ER, EER, and relational models, laying the foundation for database construction.
+- Developed SQL queries in MS SQL Server to efficiently retrieve relevant statistics from the database.
+- Created an intuitive, user-friendly ASP.NET Core Web Application, displaying requested data in an organized tabular format for an enhanced user experience.
 
-
-## Title: **How to access the front-end of the Music Band Database**
+##  **How to access the front-end of the Music Band Database**
 
 
 ****
