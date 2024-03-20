@@ -5,9 +5,9 @@
 - Developed SQL queries in MS SQL Server to efficiently retrieve relevant statistics from the database.
 - Created an intuitive, user-friendly ASP.NET Core Web Application, displaying requested data in an organized tabular format for an enhanced user experience.
 
-##  **How to access the front-end of the Music Band Database**
+ Below is the Visual demonstration of "How to operate the front-end webpage."
 
-
+  ![](demo.gif)
 ****
 ## **Introduction**
 
@@ -39,6 +39,8 @@ And then press Connect
 **Note** : It has to be connected using Windows Authentication and not the SQL server authentication.
 
 ****
+
+##  **How to access the front-end of the Music Band Database**
 
 ## Instructions
 
@@ -93,8 +95,6 @@ Follow the following steps to install the Visual studio.
 
  ![](6.png)
 
- ### **5. Operating the front End.**
 
- Below is the Visual demonstration of "How to operate the front-end webpage."
 
-  ![](demo.gif)
+
